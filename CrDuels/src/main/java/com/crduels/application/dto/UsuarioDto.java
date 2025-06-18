@@ -2,9 +2,11 @@ package com.crduels.application.dto;
 
 import lombok.Data;
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.UUID;
-
 @Data
 public class UsuarioDto {
     private UUID id;
