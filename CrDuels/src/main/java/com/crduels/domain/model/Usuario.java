@@ -1,4 +1,8 @@
-package com.crduels.entity;
+package com.crduels.domain.model;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -7,6 +11,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "usuarios")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Usuario {
 
     @Id
@@ -46,70 +53,4 @@ public class Usuario {
 
     private Integer reputacion = 100;
 
-    public Usuario() {}
-
-    // Métodos getter y setter
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getTagClash() {
-        return tagClash;
-    }
-
-    public void setTagClash(String tagClash) {
-        this.tagClash = tagClash;
-    }
-
-    public String getLinkAmistad() {
-        return linkAmistad;
-    }
-
-    public void setLinkAmistad(String linkAmistad) {
-        this.linkAmistad = linkAmistad;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-    }
-
-    public Integer getReputacion() {
-        return reputacion;
-    }
-
-    public void setReputacion(Integer reputacion) {
-        this.reputacion = reputacion;
-    }
 }
