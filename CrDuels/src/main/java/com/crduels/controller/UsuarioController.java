@@ -3,6 +3,7 @@ package com.crduels.controller;
 import com.crduels.entity.Usuario;
 import com.crduels.service.UsuarioService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +20,13 @@ public class UsuarioController {
     }
 
     @PostMapping("/registro")
-    public ResponseEntity<Usuario> registrar(@Valid @RequestBody Usuario usuario) {
-        Usuario nuevo = usuarioService.registrarUsuario(usuario);
-        return ResponseEntity.ok(nuevo);
+    public ResponseEntity<?> registrar(@Valid @RequestBody Usuario usuario) {
+        try {
+            Usuario nuevo = usuarioService.registrarUsuario(usuario);
+            return ResponseEntity.ok(nuevo);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
