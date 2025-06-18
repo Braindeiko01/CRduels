@@ -1,7 +1,7 @@
-package com.crduels.service;
+package com.crduels.application.service;
 
-import com.crduels.entity.Usuario;
-import com.crduels.repository.UsuarioRepository;
+import com.crduels.domain.model.Usuario;
+import com.crduels.domain.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
