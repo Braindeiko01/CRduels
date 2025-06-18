@@ -1,7 +1,7 @@
-package com.crduels.controller;
+package com.crduels.infrastructure.controller;
 
-import com.crduels.entity.Usuario;
-import com.crduels.service.UsuarioService;
+import com.crduels.domain.entity.Usuario;
+import com.crduels.application.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

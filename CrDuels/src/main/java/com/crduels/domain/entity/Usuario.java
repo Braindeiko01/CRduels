@@ -1,4 +1,4 @@
-package com.crduels.entity;
+package com.crduels.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
