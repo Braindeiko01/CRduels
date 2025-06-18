@@ -1,7 +1,8 @@
-package com.crduels.controller;
+package com.crduels.infrastructure.controller;
 
-import com.crduels.entity.Usuario;
-import com.crduels.service.UsuarioService;
+import com.crduels.application.dto.UsuarioDto;
+import com.crduels.application.service.UsuarioService;
+import com.crduels.infrastructure.controller.UsuarioController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -30,19 +31,19 @@ class UsuarioControllerTest {
 
     @Test
     void registrar_devuelveUsuarioRegistrado() throws Exception {
-        Usuario usuario = crearUsuario();
-        Mockito.when(usuarioService.registrarUsuario(Mockito.any(Usuario.class))).thenReturn(usuario);
+        UsuarioDto usuario = crearUsuario();
+        Mockito.when(usuarioService.registrarUsuario(Mockito.any(UsuarioDto.class))).thenReturn(usuario);
 
         mockMvc.perform(post("/api/usuarios/registro")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(usuario)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value(usuario.getEmail()));
     }
 
     @Test
     void obtener_devuelveUsuarioCuandoExiste() throws Exception {
-        Usuario usuario = crearUsuario();
+        UsuarioDto usuario = crearUsuario();
         UUID id = usuario.getId();
         Mockito.when(usuarioService.obtenerPorId(id)).thenReturn(Optional.of(usuario));
 
@@ -60,8 +61,8 @@ class UsuarioControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    private Usuario crearUsuario() {
-        Usuario u = new Usuario();
+    private UsuarioDto crearUsuario() {
+        UsuarioDto u = new UsuarioDto();
         u.setNombre("Test");
         u.setEmail("test@example.com");
         u.setTelefono("+123456789");
