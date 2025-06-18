@@ -5,7 +5,11 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -44,7 +48,10 @@ public class Usuario {
     @Column(name = "tag_clash", unique = true)
     private String tagClash;
 
-    @Pattern(regexp = "^(https://link\\.clashroyale\\.com/invite/friend\?tag=.*)?$", message = "Enlace de amistad inválido")
+    @Pattern(
+        regexp = "^(https://link\\.clashroyale\\.com/invite/friend\\?tag=[A-Z0-9]+)?$",
+        message = "Enlace de amistad inválido"
+    )
     @Column(name = "link_amistad")
     private String linkAmistad;
 
