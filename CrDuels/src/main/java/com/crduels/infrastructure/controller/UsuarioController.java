@@ -1,8 +1,10 @@
-package com.crduels.controller;
+package com.crduels.infrastructure.controller;
 
-import com.crduels.entity.Usuario;
-import com.crduels.service.UsuarioService;
+import com.crduels.application.dto.UsuarioDto;
+import com.crduels.application.service.UsuarioService;
+import com.crduels.application.exception.DuplicateUserException;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,17 +21,19 @@ public class UsuarioController {
     }
 
     @PostMapping("/registro")
-    public ResponseEntity<?> registrar(@Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<?> registrar(@Valid @RequestBody UsuarioDto usuario) {
         try {
-            Usuario nuevo = usuarioService.registrarUsuario(usuario);
-            return ResponseEntity.status(201).body(nuevo);
+            UsuarioDto nuevo = usuarioService.registrarUsuario(usuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
+        } catch (DuplicateUserException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtener(@PathVariable UUID id) {
+    public ResponseEntity<UsuarioDto> obtener(@PathVariable UUID id) {
         return usuarioService.obtenerPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
