@@ -10,7 +10,13 @@ import java.util.UUID;
 public class Usuario {
 
     @Id
-    private UUID id = UUID.randomUUID();
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
+    @org.hibernate.annotations.GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    private UUID id;
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 100)
@@ -42,7 +48,7 @@ public class Usuario {
 
     public Usuario() {}
 
-    // Getters y setters
+    // Métodos getter y setter
     public UUID getId() {
         return id;
     }
