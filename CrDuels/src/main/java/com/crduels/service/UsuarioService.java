@@ -21,9 +21,9 @@ public class UsuarioService {
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             throw new DuplicateUserException("El email ya está registrado");
         }
+      
         if (usuarioRepository.existsByTelefono(usuario.getTelefono())) {
             throw new DuplicateUserException("El teléfono ya está registrado");
-
         }
 
         return usuarioRepository.save(usuario);
