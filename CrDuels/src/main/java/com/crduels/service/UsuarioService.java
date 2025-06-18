@@ -23,6 +23,7 @@ public class UsuarioService {
         }
         if (usuarioRepository.existsByTelefono(usuario.getTelefono())) {
             throw new DuplicateUserException("El teléfono ya está registrado");
+
         }
 
         return usuarioRepository.save(usuario);
