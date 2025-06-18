@@ -1,4 +1,5 @@
 # CRduels
+codex/expand-readme.md-with-project-info
 
 CRduels is a Spring Boot backend service for managing Clash Royale duel bets. It allows users to register and consult participant information.
 
@@ -45,5 +46,3 @@ curl -X POST http://localhost:8080/api/usuarios/registro \
 ```bash
 curl http://localhost:8080/api/usuarios/<uuid>
 ```
-
-

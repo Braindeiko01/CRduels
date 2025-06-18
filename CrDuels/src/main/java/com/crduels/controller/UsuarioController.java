@@ -19,9 +19,13 @@ public class UsuarioController {
     }
 
     @PostMapping("/registro")
-    public ResponseEntity<Usuario> registrar(@Valid @RequestBody Usuario usuario) {
-        Usuario nuevo = usuarioService.registrarUsuario(usuario);
-        return ResponseEntity.ok(nuevo);
+    public ResponseEntity<?> registrar(@Valid @RequestBody Usuario usuario) {
+        try {
+            Usuario nuevo = usuarioService.registrarUsuario(usuario);
+            return ResponseEntity.status(201).body(nuevo);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
