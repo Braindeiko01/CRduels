@@ -1,64 +1,54 @@
-package com.crduels.service;
-
-import com.crduels.entity.Usuario;
-import com.crduels.repository.UsuarioRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
+@DataJpaTest
+@Import(UsuarioService.class)
 class UsuarioServiceTest {
 
-    @Mock
-    private UsuarioRepository usuarioRepository;
-
-    @InjectMocks
+    @Autowired
     private UsuarioService usuarioService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    @Test
-    void registrarUsuario_guardaYDevuelveUsuario() {
+    private Usuario crearUsuario(String email, String telefono) {
         Usuario usuario = new Usuario();
-        when(usuarioRepository.save(usuario)).thenReturn(usuario);
-
-        Usuario resultado = usuarioService.registrarUsuario(usuario);
-
-        assertSame(usuario, resultado);
-        verify(usuarioRepository).save(usuario);
+        usuario.setNombre("Test");
+        usuario.setEmail(email);
+        usuario.setTelefono(telefono);
+        String tag = UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
+        usuario.setTagClash("#" + tag);
+        return usuario;
     }
 
     @Test
-    void obtenerPorId_devuelveUsuarioCuandoExiste() {
-        UUID id = UUID.randomUUID();
-        Usuario usuario = new Usuario();
-        when(usuarioRepository.findById(id)).thenReturn(Optional.of(usuario));
-
-        Optional<Usuario> resultado = usuarioService.obtenerPorId(id);
-
-        assertTrue(resultado.isPresent());
-        assertSame(usuario, resultado.get());
-        verify(usuarioRepository).findById(id);
+    void registrarUsuario_guardaUsuario() {
+        Usuario usuario = crearUsuario("test1@example.com", "+111111111");
+        Usuario guardado = usuarioService.registrarUsuario(usuario);
+        usuarioRepository.flush();
+        assertTrue(usuarioRepository.findById(guardado.getId()).isPresent());
     }
 
     @Test
-    void obtenerPorId_devuelveVacioCuandoNoExiste() {
-        UUID id = UUID.randomUUID();
-        when(usuarioRepository.findById(id)).thenReturn(Optional.empty());
+    void registrarUsuario_emailDuplicado_rechazado() {
+        Usuario primero = crearUsuario("dup@example.com", "+222222222");
+        usuarioService.registrarUsuario(primero);
+        usuarioRepository.flush();
 
-        Optional<Usuario> resultado = usuarioService.obtenerPorId(id);
+        Usuario duplicado = crearUsuario("dup@example.com", "+333333333");
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            usuarioService.registrarUsuario(duplicado);
+            usuarioRepository.flush();
+        });
+    }
 
-        assertTrue(resultado.isEmpty());
-        verify(usuarioRepository).findById(id);
+    @Test
+    void registrarUsuario_telefonoDuplicado_rechazado() {
+        Usuario primero = crearUsuario("phone@example.com", "+444444444");
+        usuarioService.registrarUsuario(primero);
+        usuarioRepository.flush();
+
+        Usuario duplicado = crearUsuario("other@example.com", "+444444444");
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            usuarioService.registrarUsuario(duplicado);
+            usuarioRepository.flush();
+        });
     }
 }
