@@ -17,6 +17,13 @@ public class UsuarioService {
     }
 
     public Usuario registrarUsuario(Usuario usuario) {
+        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+            throw new IllegalArgumentException("El email ya está registrado");
+        }
+        if (usuarioRepository.existsByTelefono(usuario.getTelefono())) {
+            throw new IllegalArgumentException("El teléfono ya está registrado");
+        }
+
         return usuarioRepository.save(usuario);
     }
 
