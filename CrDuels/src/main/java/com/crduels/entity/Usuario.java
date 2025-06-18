@@ -42,7 +42,7 @@ public class Usuario {
 
     public Usuario() {}
 
-    // Getters y setters
+    // Métodos getter y setter
     public UUID getId() {
         return id;
     }

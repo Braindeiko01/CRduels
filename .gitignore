@@ -1,3 +1,4 @@
+ codex/crear-.gitignore-y-eliminar-target
 # Ignore Maven build directories
 **/target/
 
@@ -8,3 +9,4 @@
 .project
 .settings/
 .vscode/
+
