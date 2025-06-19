@@ -1,28 +1,30 @@
 package com.crduels.application.service;
 
+import com.crduels.application.dto.MatchResultDto;
 import com.crduels.domain.model.Apuesta;
 import com.crduels.domain.model.EstadoApuesta;
 import com.crduels.infrastructure.repository.ApuestaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MatchmakingService {
 
     private final ApuestaRepository apuestaRepository;
-
-    public MatchmakingService(ApuestaRepository apuestaRepository) {
-        this.apuestaRepository = apuestaRepository;
-    }
 
     /**
      * Ejecuta el proceso de emparejamiento de apuestas. Se buscan todas las
      * apuestas con estado PENDIENTE y se agrupan por monto y modo de juego.
      * Para cada grupo se toman pares de apuestas y se marcan como EMPAREJADA.
      */
-    public void ejecutarMatchmaking() {
+    public List<MatchResultDto> ejecutarMatchmaking() {
+        List<MatchResultDto> resultados = new ArrayList<>();
+
         // 1. Obtener todas las apuestas pendientes
         List<Apuesta> pendientes = apuestaRepository.findByEstado(EstadoApuesta.PENDIENTE);
 
@@ -39,10 +41,20 @@ public class MatchmakingService {
                 // 4. Cambiar estado y guardar
                 a1.setEstado(EstadoApuesta.EMPAREJADA);
                 a2.setEstado(EstadoApuesta.EMPAREJADA);
-                apuestaRepository.save(a1);
-                apuestaRepository.save(a2);
+                // opcional: registrar hora de emparejamiento si existiera campo
+
+                apuestaRepository.saveAll(Arrays.asList(a1, a2));
+
+                resultados.add(new MatchResultDto(
+                        a1.getId(),
+                        a2.getId(),
+                        a1.getMonto(),
+                        a1.getModoJuego()
+                ));
             }
         }
+
+        return resultados;
     }
 
     /**
