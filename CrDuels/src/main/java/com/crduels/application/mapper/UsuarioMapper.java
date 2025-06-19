@@ -10,6 +10,11 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface UsuarioMapper {
+
     UsuarioDto toDto(Usuario usuario);
+
+    @org.mapstruct.Mapping(target = "id", ignore = true)
+    @org.mapstruct.Mapping(target = "saldo", ignore = true)
+    @org.mapstruct.Mapping(target = "reputacion", ignore = true)
     Usuario toEntity(UsuarioDto dto);
 }
