@@ -36,12 +36,18 @@ public class ApuestaService {
 
         if (apuesta.getJugador1() != null) {
             usuarioRepository.findById(apuesta.getJugador1().getId()).ifPresent(u -> {
+                if (u.getSaldo().compareTo(apuesta.getMonto()) < 0) {
+                    throw new IllegalArgumentException("Saldo insuficiente para el jugador");
+                }
                 u.setSaldo(u.getSaldo().subtract(apuesta.getMonto()));
                 usuarioRepository.save(u);
             });
         }
         if (apuesta.getJugador2() != null) {
             usuarioRepository.findById(apuesta.getJugador2().getId()).ifPresent(u -> {
+                if (u.getSaldo().compareTo(apuesta.getMonto()) < 0) {
+                    throw new IllegalArgumentException("Saldo insuficiente para el jugador");
+                }
                 u.setSaldo(u.getSaldo().subtract(apuesta.getMonto()));
                 usuarioRepository.save(u);
             });
