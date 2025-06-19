@@ -3,6 +3,7 @@ package com.crduels.application.mapper;
 import com.crduels.application.dto.TransaccionRequestDto;
 import com.crduels.application.dto.TransaccionResponseDto;
 import com.crduels.domain.model.Transaccion;
+import com.crduels.domain.model.Usuario;
 
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,11 @@ public class TransaccionMapper {
             return null;
         }
         Transaccion transaccion = new Transaccion();
-        transaccion.setUsuarioId(dto.getUsuarioId());
+        if (dto.getUsuarioId() != null) {
+            Usuario usuario = new Usuario();
+            usuario.setId(dto.getUsuarioId());
+            transaccion.setUsuario(usuario);
+        }
         transaccion.setMonto(dto.getMonto());
         transaccion.setTipo(dto.getTipo());
         return transaccion;
@@ -26,7 +31,7 @@ public class TransaccionMapper {
         }
         return TransaccionResponseDto.builder()
                 .id(entity.getId())
-                .usuarioId(entity.getUsuarioId())
+                .usuarioId(entity.getUsuario() != null ? entity.getUsuario().getId() : null)
                 .monto(entity.getMonto())
                 .tipo(entity.getTipo())
                 .estado(entity.getEstado())

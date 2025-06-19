@@ -33,7 +33,7 @@ public class TransaccionService {
     }
 
     public List<TransaccionResponseDto> listarPorUsuario(UUID usuarioId) {
-        return transaccionRepository.findByUsuarioId(usuarioId).stream()
+        return transaccionRepository.findByUsuario_Id(usuarioId).stream()
                 .map(transaccionMapper::toDto)
                 .collect(Collectors.toList());
     }

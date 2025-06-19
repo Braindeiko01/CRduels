@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.crduels.domain.model.Usuario;
+
 @Entity
 @Table(name = "transacciones")
 @Getter
@@ -29,8 +31,9 @@ public class Transaccion {
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "usuario_id", columnDefinition = "uuid", nullable = false)
-    private UUID usuarioId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
     @Column(nullable = false)
     private BigDecimal monto;

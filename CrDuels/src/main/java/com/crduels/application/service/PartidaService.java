@@ -30,7 +30,7 @@ public class PartidaService {
     }
 
     public Optional<PartidaResponseDto> obtenerPorApuestaId(UUID apuestaId) {
-        return partidaRepository.findByApuestaId(apuestaId).map(partidaMapper::toDto);
+        return partidaRepository.findByApuesta_Id(apuestaId).map(partidaMapper::toDto);
     }
 
     public PartidaResponseDto marcarComoValidada(UUID partidaId) {

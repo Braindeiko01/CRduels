@@ -7,5 +7,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PartidaRepository extends JpaRepository<Partida, UUID> {
-    Optional<Partida> findByApuestaId(UUID apuestaId);
+    Optional<Partida> findByApuesta_Id(UUID apuestaId);
 }
