@@ -21,6 +21,10 @@ Database settings are defined in `CrDuels/src/main/resources/application.propert
 spring.datasource.url=jdbc:postgresql://<host>:<port>/crduels
 spring.datasource.username=<user>
 spring.datasource.password=<password>
+
+# WhatsApp credentials
+WHATSAPP_API_TOKEN=<your token>
+WHATSAPP_PHONE_NUMBER_ID=<your phone id>
 ```
 
 ## API Usage

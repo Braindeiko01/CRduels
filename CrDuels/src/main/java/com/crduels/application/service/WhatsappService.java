@@ -15,15 +15,24 @@ import java.util.Map;
 @Service
 public class WhatsappService {
 
-    @Value("${WHATSAPP_API_TOKEN}")
+    /** WhatsApp API token. Uses an empty string if not configured to prevent
+     *  startup failures. */
+    @Value("${whatsapp.api.token:}")
     private String apiToken;
 
-    @Value("${WHATSAPP_PHONE_NUMBER_ID}")
+    /** Identifier of the WhatsApp Business phone number. */
+    @Value("${whatsapp.phone-number-id:}")
+
     private String phoneNumberId;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
     public void enviarMensajeTexto(String waId, String mensaje) {
+        if (apiToken.isBlank() || phoneNumberId.isBlank()) {
+            // Avoid failing at runtime if credentials are missing
+            return;
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(apiToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
