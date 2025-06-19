@@ -18,9 +18,24 @@ public class MatchmakingService {
     private final ApuestaRepository apuestaRepository;
 
     /**
-     * Ejecuta el proceso de emparejamiento de apuestas. Se buscan todas las
-     * apuestas con estado PENDIENTE y se agrupan por monto y modo de juego.
-     * Para cada grupo se toman pares de apuestas y se marcan como EMPAREJADA.
+     * Ejecuta el proceso de matchmaking para las apuestas pendientes.
+     * <p>
+     * El algoritmo realiza las siguientes acciones:
+     * <ol>
+     *     <li>Consulta en {@link ApuestaRepository} todas las apuestas con
+     *     estado {@link EstadoApuesta#PENDIENTE}.</li>
+     *     <li>Agrupa dichas apuestas usando la clase interna {@link Key} de
+     *     acuerdo al mismo monto y modo de juego.</li>
+     *     <li>Dentro de cada grupo forma pares tomando las apuestas de dos en
+     *     dos.</li>
+     *     <li>Cada par se marca con el estado
+     *     {@link EstadoApuesta#EMPAREJADA} y se persiste.</li>
+     *     <li>Por cada par creado se genera un {@link MatchResultDto} con la
+     *     información relevante.</li>
+     * </ol>
+     *
+     * @return lista de resultados con los emparejamientos realizados, donde cada
+     *         entrada representa dos apuestas compatibles.
      */
     public List<MatchResultDto> ejecutarMatchmaking() {
         List<MatchResultDto> resultados = new ArrayList<>();
@@ -60,5 +75,5 @@ public class MatchmakingService {
     /**
      * Llave para el agrupamiento por monto y modo de juego.
      */
-    private record Key(java.math.BigDecimal monto, String modo) { }
+    private record Key(BigDecimal monto, String modo) { }
 }
