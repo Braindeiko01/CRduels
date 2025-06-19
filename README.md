@@ -46,3 +46,11 @@ curl -X POST http://localhost:8080/api/usuarios/registro \
 ```bash
 curl http://localhost:8080/api/usuarios/<uuid>
 ```
+
+### API documentation
+
+When the server is running you can explore the REST contracts using Swagger UI at:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
