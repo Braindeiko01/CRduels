@@ -3,6 +3,7 @@ package com.crduels.infrastructure.controller;
 import com.crduels.application.dto.RegistroWhatsAppDto;
 import com.crduels.application.service.UsuarioService;
 import com.crduels.application.service.WhatsappService;
+import com.crduels.infrastructure.repository.PartidaRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,14 @@ public class WhatsappWebhookController {
 
     private final UsuarioService usuarioService;
     private final WhatsappService whatsappService;
+    private final PartidaRepository partidaRepository;
 
-    public WhatsappWebhookController(UsuarioService usuarioService, WhatsappService whatsappService) {
+    public WhatsappWebhookController(UsuarioService usuarioService,
+                                     WhatsappService whatsappService,
+                                     PartidaRepository partidaRepository) {
         this.usuarioService = usuarioService;
         this.whatsappService = whatsappService;
+        this.partidaRepository = partidaRepository;
     }
 
     @GetMapping("/whatsapp")
@@ -52,8 +57,24 @@ public class WhatsappWebhookController {
         RegistroWhatsAppDto dto = new RegistroWhatsAppDto(nombre, text);
         var usuario = usuarioService.registrarDesdeWhatsapp(waId, dto);
 
-        String saludo = "¡Hola " + usuario.getNombre() + "! Para comenzar, necesitas hacer un depósito.";
-        whatsappService.enviarMensajeTexto(waId, saludo);
+        partidaRepository.findActivaPorTelefono(waId).ifPresentOrElse(partida -> {
+            String destino;
+            if (waId.equals(partida.getApuesta().getJugador1().getTelefono())) {
+                destino = partida.getApuesta().getJugador2().getTelefono();
+            } else {
+                destino = partida.getApuesta().getJugador1().getTelefono();
+            }
+            whatsappService.enviarMensajeTexto(destino, text);
+        }, () -> {
+            if (usuario.getTagClash() == null) {
+                whatsappService.enviarMenuRegistro(waId);
+            } else if (usuario.getSaldo().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+                whatsappService.enviarMenuRecarga(waId);
+            } else {
+                whatsappService.enviarMenuPrincipal(waId);
+            }
+        });
+
         return ResponseEntity.ok().build();
     }
 }
