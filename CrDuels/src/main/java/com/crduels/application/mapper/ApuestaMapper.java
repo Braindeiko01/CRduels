@@ -32,4 +32,5 @@ public class ApuestaMapper {
                 .creadoEn(entity.getCreadoEn())
                 .build();
     }
+
 }

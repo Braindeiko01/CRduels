@@ -35,4 +35,5 @@ public class UsuarioMapper {
         // saldo and reputacion are managed by the entity defaults
         return usuario;
     }
+
 }

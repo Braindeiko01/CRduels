@@ -3,6 +3,7 @@ package com.crduels.application.mapper;
 import com.crduels.application.dto.PartidaRequestDto;
 import com.crduels.application.dto.PartidaResponseDto;
 import com.crduels.domain.model.Partida;
+
 import org.springframework.stereotype.Component;
 
 @Component
