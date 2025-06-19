@@ -3,16 +3,34 @@ package com.crduels.application.mapper;
 import com.crduels.application.dto.ApuestaRequestDto;
 import com.crduels.application.dto.ApuestaResponseDto;
 import com.crduels.domain.model.Apuesta;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface ApuestaMapper {
+@Component
+public class ApuestaMapper {
 
-    @org.mapstruct.Mapping(target = "id", ignore = true)
-    @org.mapstruct.Mapping(target = "estado", ignore = true)
-    @org.mapstruct.Mapping(target = "creadoEn", ignore = true)
-    Apuesta toEntity(ApuestaRequestDto dto);
+    public Apuesta toEntity(ApuestaRequestDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        Apuesta apuesta = new Apuesta();
+        apuesta.setJugador1Id(dto.getJugador1Id());
+        apuesta.setJugador2Id(dto.getJugador2Id());
+        apuesta.setMonto(dto.getMonto());
+        apuesta.setModoJuego(dto.getModoJuego());
+        return apuesta;
+    }
 
-    ApuestaResponseDto toDto(Apuesta entity);
+    public ApuestaResponseDto toDto(Apuesta entity) {
+        if (entity == null) {
+            return null;
+        }
+        return ApuestaResponseDto.builder()
+                .id(entity.getId())
+                .monto(entity.getMonto())
+                .modoJuego(entity.getModoJuego())
+                .estado(entity.getEstado())
+                .creadoEn(entity.getCreadoEn())
+                .build();
+    }
+
 }

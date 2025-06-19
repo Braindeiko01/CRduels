@@ -3,16 +3,34 @@ package com.crduels.application.mapper;
 import com.crduels.application.dto.TransaccionRequestDto;
 import com.crduels.application.dto.TransaccionResponseDto;
 import com.crduels.domain.model.Transaccion;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface TransaccionMapper {
+import org.springframework.stereotype.Component;
 
-    @org.mapstruct.Mapping(target = "id", ignore = true)
-    @org.mapstruct.Mapping(target = "estado", ignore = true)
-    @org.mapstruct.Mapping(target = "creadoEn", ignore = true)
-    Transaccion toEntity(TransaccionRequestDto dto);
+@Component
+public class TransaccionMapper {
 
-    TransaccionResponseDto toDto(Transaccion entity);
+    public Transaccion toEntity(TransaccionRequestDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        Transaccion transaccion = new Transaccion();
+        transaccion.setUsuarioId(dto.getUsuarioId());
+        transaccion.setMonto(dto.getMonto());
+        transaccion.setTipo(dto.getTipo());
+        return transaccion;
+    }
+
+    public TransaccionResponseDto toDto(Transaccion entity) {
+        if (entity == null) {
+            return null;
+        }
+        return TransaccionResponseDto.builder()
+                .id(entity.getId())
+                .usuarioId(entity.getUsuarioId())
+                .monto(entity.getMonto())
+                .tipo(entity.getTipo())
+                .estado(entity.getEstado())
+                .creadoEn(entity.getCreadoEn())
+                .build();
+    }
 }

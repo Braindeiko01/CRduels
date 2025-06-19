@@ -2,19 +2,38 @@ package com.crduels.application.mapper;
 
 import com.crduels.domain.model.Usuario;
 import com.crduels.application.dto.UsuarioDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.springframework.stereotype.Component;
 
-@Mapper(
-        componentModel = "spring",
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
-)
-public interface UsuarioMapper {
+@Component
+public class UsuarioMapper {
 
-    UsuarioDto toDto(Usuario usuario);
+    public UsuarioDto toDto(Usuario usuario) {
+        if (usuario == null) {
+            return null;
+        }
+        return UsuarioDto.builder()
+                .nombre(usuario.getNombre())
+                .email(usuario.getEmail())
+                .telefono(usuario.getTelefono())
+                .tagClash(usuario.getTagClash())
+                .linkAmistad(usuario.getLinkAmistad())
+                .saldo(usuario.getSaldo())
+                .reputacion(usuario.getReputacion())
+                .build();
+    }
 
-    @org.mapstruct.Mapping(target = "id", ignore = true)
-    @org.mapstruct.Mapping(target = "saldo", ignore = true)
-    @org.mapstruct.Mapping(target = "reputacion", ignore = true)
-    Usuario toEntity(UsuarioDto dto);
+    public Usuario toEntity(UsuarioDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        Usuario usuario = new Usuario();
+        usuario.setNombre(dto.getNombre());
+        usuario.setEmail(dto.getEmail());
+        usuario.setTelefono(dto.getTelefono());
+        usuario.setTagClash(dto.getTagClash());
+        usuario.setLinkAmistad(dto.getLinkAmistad());
+        // saldo and reputacion are managed by the entity defaults
+        return usuario;
+    }
+
 }
