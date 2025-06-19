@@ -1,13 +1,15 @@
 package com.crduels.application.dto;
 
-import lombok.Data;
+import lombok.*;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UsuarioDto {
     private UUID id;
     @NotBlank(message = "El nombre es obligatorio")
@@ -27,8 +29,8 @@ public class UsuarioDto {
     private String tagClash;
 
     @Pattern(
-        regexp = "^(https://link\\.clashroyale\\.com/invite/friend\\?tag=[A-Z0-9]+)?$",
-        message = "Enlace de amistad inválido"
+            regexp = "^(https://link\\.clashroyale\\.com/invite/friend\\?tag=[A-Z0-9]+)?$",
+            message = "Enlace de amistad inválido"
     )
     private String linkAmistad;
 

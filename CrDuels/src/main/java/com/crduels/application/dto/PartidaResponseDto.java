@@ -1,8 +1,6 @@
 package com.crduels.application.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -10,8 +8,9 @@ import java.util.UUID;
 /**
  * DTO para responder con la información de una partida.
  */
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class PartidaResponseDto {
     private UUID id;

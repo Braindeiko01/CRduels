@@ -1,16 +1,15 @@
 package com.crduels.application.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
 /**
  * DTO para la creación de partidas.
  */
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class PartidaRequestDto {
     private UUID apuestaId;
