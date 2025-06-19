@@ -22,6 +22,7 @@ public class WhatsappService {
 
     /** Identifier of the WhatsApp Business phone number. */
     @Value("${whatsapp.phone-number-id:}")
+
     private String phoneNumberId;
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -31,6 +32,7 @@ public class WhatsappService {
             // Avoid failing at runtime if credentials are missing
             return;
         }
+
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(apiToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
