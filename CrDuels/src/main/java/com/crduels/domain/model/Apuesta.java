@@ -11,6 +11,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.crduels.domain.model.Usuario;
+
+/**
+ * Representa una apuesta realizada entre dos jugadores.
+ */
+
 @Entity
 @Table(name = "apuestas")
 @Getter
@@ -29,11 +35,13 @@ public class Apuesta {
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "jugador1_id", columnDefinition = "uuid", nullable = false)
-    private UUID jugador1Id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jugador1_id", nullable = false)
+    private Usuario jugador1;
 
-    @Column(name = "jugador2_id", columnDefinition = "uuid", nullable = false)
-    private UUID jugador2Id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jugador2_id", nullable = false)
+    private Usuario jugador2;
 
     @Column(nullable = false)
     private BigDecimal monto;

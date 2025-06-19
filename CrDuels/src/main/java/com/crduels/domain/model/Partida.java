@@ -10,6 +10,13 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.crduels.domain.model.Apuesta;
+import com.crduels.domain.model.Usuario;
+
+/**
+ * Representa el resultado de una apuesta.
+ */
+
 @Entity
 @Table(name = "partidas")
 @Getter
@@ -28,11 +35,13 @@ public class Partida {
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "apuesta_id", columnDefinition = "uuid", nullable = false)
-    private UUID apuestaId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "apuesta_id", nullable = false)
+    private Apuesta apuesta;
 
-    @Column(name = "ganador_id", columnDefinition = "uuid")
-    private UUID ganadorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ganador_id")
+    private Usuario ganador;
 
     @Column(nullable = false)
     private boolean validada;
