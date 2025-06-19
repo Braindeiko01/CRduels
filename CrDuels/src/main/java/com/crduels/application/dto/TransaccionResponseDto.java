@@ -2,17 +2,17 @@ package com.crduels.application.dto;
 
 import com.crduels.domain.model.EstadoTransaccion;
 import com.crduels.domain.model.TipoTransaccion;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
-@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransaccionResponseDto {
     private UUID id;
     private UUID usuarioId;
