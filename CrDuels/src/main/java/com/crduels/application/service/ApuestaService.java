@@ -6,6 +6,7 @@ import com.crduels.application.mapper.ApuestaMapper;
 import com.crduels.domain.model.Apuesta;
 import com.crduels.domain.model.EstadoApuesta;
 import com.crduels.infrastructure.repository.ApuestaRepository;
+import com.crduels.infrastructure.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,16 +19,34 @@ public class ApuestaService {
 
     private final ApuestaRepository apuestaRepository;
     private final ApuestaMapper apuestaMapper;
+    private final UsuarioRepository usuarioRepository;
 
-    public ApuestaService(ApuestaRepository apuestaRepository, ApuestaMapper apuestaMapper) {
+    public ApuestaService(ApuestaRepository apuestaRepository,
+                          ApuestaMapper apuestaMapper,
+                          UsuarioRepository usuarioRepository) {
         this.apuestaRepository = apuestaRepository;
         this.apuestaMapper = apuestaMapper;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public ApuestaResponseDto crearApuesta(ApuestaRequestDto dto) {
         Apuesta apuesta = apuestaMapper.toEntity(dto);
         apuesta.setEstado(EstadoApuesta.PENDIENTE);
         apuesta.setCreadoEn(LocalDateTime.now());
+
+        if (apuesta.getJugador1() != null) {
+            usuarioRepository.findById(apuesta.getJugador1().getId()).ifPresent(u -> {
+                u.setSaldo(u.getSaldo().subtract(apuesta.getMonto()));
+                usuarioRepository.save(u);
+            });
+        }
+        if (apuesta.getJugador2() != null) {
+            usuarioRepository.findById(apuesta.getJugador2().getId()).ifPresent(u -> {
+                u.setSaldo(u.getSaldo().subtract(apuesta.getMonto()));
+                usuarioRepository.save(u);
+            });
+        }
+
         Apuesta saved = apuestaRepository.save(apuesta);
         return apuestaMapper.toDto(saved);
     }
