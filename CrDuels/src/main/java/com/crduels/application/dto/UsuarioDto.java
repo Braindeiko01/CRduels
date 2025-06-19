@@ -11,7 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class UsuarioDto {
-    private UUID id;
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 100)
     private String nombre;
