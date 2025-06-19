@@ -1,5 +1,6 @@
 package com.crduels.application.service;
 
+import com.crduels.application.dto.MatchResultDto;
 import com.crduels.domain.model.Apuesta;
 import com.crduels.domain.model.EstadoApuesta;
 import com.crduels.infrastructure.repository.ApuestaRepository;
@@ -22,7 +23,7 @@ public class MatchmakingService {
      * apuestas con estado PENDIENTE y se agrupan por monto y modo de juego.
      * Para cada grupo se toman pares de apuestas y se marcan como EMPAREJADA.
      */
-    public void ejecutarMatchmaking() {
+    public List<MatchResultDto> ejecutarMatchmaking() {
         // 1. Obtener todas las apuestas pendientes
         List<Apuesta> pendientes = apuestaRepository.findByEstado(EstadoApuesta.PENDIENTE);
 
@@ -31,6 +32,7 @@ public class MatchmakingService {
                 .collect(Collectors.groupingBy(a -> new Key(a.getMonto(), a.getModoJuego())));
 
         // 3. Procesar cada grupo buscando pares
+        List<MatchResultDto> resultados = new ArrayList<>();
         for (List<Apuesta> grupo : grupos.values()) {
             for (int i = 0; i + 1 < grupo.size(); i += 2) {
                 Apuesta a1 = grupo.get(i);
@@ -41,8 +43,12 @@ public class MatchmakingService {
                 a2.setEstado(EstadoApuesta.EMPAREJADA);
                 apuestaRepository.save(a1);
                 apuestaRepository.save(a2);
+
+                resultados.add(new MatchResultDto(a1.getId(), a2.getId(), a1.getMonto(), a1.getModoJuego()));
             }
         }
+
+        return resultados;
     }
 
     /**
