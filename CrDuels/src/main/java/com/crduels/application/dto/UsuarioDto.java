@@ -4,13 +4,14 @@ import lombok.*;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class UsuarioDto {
+    @NotBlank
+    private String googleId;
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 100)
     private String nombre;
