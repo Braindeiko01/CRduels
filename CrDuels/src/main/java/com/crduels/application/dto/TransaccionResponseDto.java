@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +16,7 @@ import java.util.UUID;
 @Builder
 public class TransaccionResponseDto {
     private UUID id;
-    private UUID usuarioId;
+    private String usuarioId;
     private BigDecimal monto;
     private TipoTransaccion tipo;
     private EstadoTransaccion estado;

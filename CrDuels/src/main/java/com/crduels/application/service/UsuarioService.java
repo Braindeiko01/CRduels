@@ -8,7 +8,6 @@ import com.crduels.infrastructure.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UsuarioService {
@@ -35,7 +34,7 @@ public class UsuarioService {
         return usuarioMapper.toDto(saved);
     }
 
-    public Optional<UsuarioDto> obtenerPorId(UUID id) {
+    public Optional<UsuarioDto> obtenerPorId(String id) {
         return usuarioRepository.findById(id).map(usuarioMapper::toDto);
     }
 

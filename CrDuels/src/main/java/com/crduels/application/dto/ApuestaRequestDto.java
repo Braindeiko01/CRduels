@@ -3,7 +3,6 @@ package com.crduels.application.dto;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 /**
  * DTO para la creación de apuestas.
@@ -13,8 +12,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class ApuestaRequestDto {
-    private UUID jugador1Id;
-    private UUID jugador2Id;
+    private String jugador1Id;
+    private String jugador2Id;
     private BigDecimal monto;
     private String modoJuego;
 }

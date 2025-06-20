@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Entity
 @Table(name = "usuarios")
@@ -16,13 +15,8 @@ import java.util.UUID;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
-    @org.hibernate.annotations.GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID id;
+    @Column(name = "id", nullable = false, unique = true)
+    private String id;
 
     private String nombre;
 

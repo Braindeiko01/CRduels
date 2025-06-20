@@ -28,7 +28,7 @@ public class TransaccionController {
     }
 
     @GetMapping("/usuario/{id}")
-    public ResponseEntity<List<TransaccionResponseDto>> listarPorUsuario(@PathVariable("id") UUID usuarioId) {
+    public ResponseEntity<List<TransaccionResponseDto>> listarPorUsuario(@PathVariable("id") String usuarioId) {
         List<TransaccionResponseDto> lista = transaccionService.listarPorUsuario(usuarioId);
         return ResponseEntity.ok(lista);
     }
