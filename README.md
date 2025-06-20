@@ -1,7 +1,8 @@
 # CRduels
-codex/expand-readme.md-with-project-info
 
 CRduels is a Spring Boot backend service for managing Clash Royale duel bets. It allows users to register and consult participant information.
+
+Each user is identified by their `googleId`, which is saved as the primary key. The email field is also unique to prevent duplicates.
 
 ## Building
 
