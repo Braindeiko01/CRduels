@@ -38,13 +38,13 @@ Examples using `curl`:
 ```bash
 curl -X POST http://localhost:8080/api/usuarios/registro \
   -H 'Content-Type: application/json' \
-  -d '{"nombre":"Ejemplo","email":"ejemplo@correo.com","telefono":"+52123456789","tagClash":"#ABC123","linkAmistad":"https://link.clashroyale.com/invite/friend?tag=ABC123"}'
+  -d '{"googleId":"gid123","nombre":"Ejemplo","email":"ejemplo@correo.com","telefono":"+52123456789","tagClash":"#ABC123","linkAmistad":"https://link.clashroyale.com/invite/friend?tag=ABC123"}'
 ```
 
 * Retrieve a user
 
 ```bash
-curl http://localhost:8080/api/usuarios/<uuid>
+curl http://localhost:8080/api/usuarios/<googleId>
 ```
 
 ### API documentation
