@@ -1,6 +1,6 @@
-package com.crduels.application.mapper;
+package com.crduels.application.usuario.mapper;
 
-import com.crduels.application.dto.UsuarioDto;
+import com.crduels.application.usuario.dto.UsuarioDto;
 import com.crduels.domain.model.Usuario;
 import org.springframework.stereotype.Component;
 
@@ -30,15 +30,14 @@ public class UsuarioMapper {
             return null;
         }
 
-        Usuario usuario = new Usuario();
-        usuario.setId(dto.getId());
-        usuario.setNombre(dto.getNombre());
-        usuario.setEmail(dto.getEmail());
-        usuario.setTelefono(dto.getTelefono());
-        usuario.setTagClash(extractTagFromUrl(dto.getLinkAmistad()));
-        usuario.setLinkAmistad(dto.getLinkAmistad());
-
-        return usuario;
+        return Usuario.builder()
+                .id(dto.getId())
+                .nombre(dto.getNombre())
+                .email(dto.getEmail())
+                .telefono(dto.getTelefono())
+                .tagClash(extractTagFromUrl(dto.getLinkAmistad()))
+                .linkAmistad(dto.getLinkAmistad())
+                .build();
     }
 
     public static String extractTagFromUrl(String url) {

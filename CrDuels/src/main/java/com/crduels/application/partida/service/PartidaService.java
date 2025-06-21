@@ -1,8 +1,8 @@
-package com.crduels.application.service;
+package com.crduels.application.partida.service;
 
-import com.crduels.application.dto.PartidaRequestDto;
-import com.crduels.application.dto.PartidaResponseDto;
-import com.crduels.application.mapper.PartidaMapper;
+import com.crduels.application.partida.dto.PartidaRequestDto;
+import com.crduels.application.partida.dto.PartidaResponseDto;
+import com.crduels.application.partida.mapper.PartidaMapper;
 import com.crduels.domain.model.*;
 import com.crduels.infrastructure.repository.ApuestaRepository;
 import com.crduels.infrastructure.repository.PartidaRepository;

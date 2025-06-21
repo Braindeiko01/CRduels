@@ -1,8 +1,8 @@
-package com.crduels.application.service;
+package com.crduels.application.transaccion.service;
 
-import com.crduels.application.dto.TransaccionRequestDto;
-import com.crduels.application.dto.TransaccionResponseDto;
-import com.crduels.application.mapper.TransaccionMapper;
+import com.crduels.application.transaccion.dto.TransaccionRequestDto;
+import com.crduels.application.transaccion.dto.TransaccionResponseDto;
+import com.crduels.application.transaccion.mapper.TransaccionMapper;
 import com.crduels.domain.model.EstadoTransaccion;
 import com.crduels.domain.model.Transaccion;
 import com.crduels.domain.model.Usuario;

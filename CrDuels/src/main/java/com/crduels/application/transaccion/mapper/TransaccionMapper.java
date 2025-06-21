@@ -1,7 +1,7 @@
-package com.crduels.application.mapper;
+package com.crduels.application.transaccion.mapper;
 
-import com.crduels.application.dto.TransaccionRequestDto;
-import com.crduels.application.dto.TransaccionResponseDto;
+import com.crduels.application.transaccion.dto.TransaccionRequestDto;
+import com.crduels.application.transaccion.dto.TransaccionResponseDto;
 import com.crduels.domain.model.Transaccion;
 import com.crduels.domain.model.Usuario;
 import org.springframework.stereotype.Component;
@@ -13,15 +13,14 @@ public class TransaccionMapper {
         if (dto == null) {
             return null;
         }
-        Transaccion transaccion = new Transaccion();
+        Transaccion.TransaccionBuilder builder = Transaccion.builder()
+                .monto(dto.getMonto())
+                .tipo(dto.getTipo());
         if (dto.getUsuarioId() != null) {
-            Usuario usuario = new Usuario();
-            usuario.setId(dto.getUsuarioId());
-            transaccion.setUsuario(usuario);
+            Usuario usuario = Usuario.builder().id(dto.getUsuarioId()).build();
+            builder.usuario(usuario);
         }
-        transaccion.setMonto(dto.getMonto());
-        transaccion.setTipo(dto.getTipo());
-        return transaccion;
+        return builder.build();
     }
 
     public TransaccionResponseDto toDto(Transaccion entity) {

@@ -1,4 +1,4 @@
-package com.crduels.application.dto;
+package com.crduels.application.apuesta.dto;
 
 import com.crduels.domain.model.EstadoApuesta;
 import lombok.AllArgsConstructor;
