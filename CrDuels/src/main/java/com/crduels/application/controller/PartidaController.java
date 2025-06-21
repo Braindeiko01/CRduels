@@ -6,6 +6,7 @@ import com.crduels.application.service.PartidaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -14,13 +15,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/partidas")
 @Tag(name = "Partidas", description = "Gestión de partidas")
+@RequiredArgsConstructor
 public class PartidaController {
 
     private final PartidaService partidaService;
-
-    public PartidaController(PartidaService partidaService) {
-        this.partidaService = partidaService;
-    }
 
     @PostMapping
     @Operation(summary = "Registrar partida", description = "Registra el resultado de una apuesta")
