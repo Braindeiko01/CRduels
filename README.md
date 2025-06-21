@@ -38,8 +38,9 @@ Examples using `curl`:
 ```bash
 curl -X POST http://localhost:8080/api/usuarios/registro \
   -H 'Content-Type: application/json' \
-  -d '{"googleId":"gid123","nombre":"Ejemplo","email":"ejemplo@correo.com","telefono":"+52123456789","tagClash":"#ABC123","linkAmistad":"https://link.clashroyale.com/invite/friend?tag=ABC123"}'
+  -d '{"googleId":"gid123","nombre":"Ejemplo","email":"ejemplo@correo.com","telefono":"+52123456789","tagClash":"#ABC123","linkAmistad":"https://link.clashroyale.com/invite/friend?tag=ABC123&token=XYZ"}'
 ```
+You can include the full Clash Royale friend link, including any `token` or other parameters.
 
 * Retrieve a user
 

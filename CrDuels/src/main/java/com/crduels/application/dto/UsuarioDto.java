@@ -29,7 +29,8 @@ public class UsuarioDto {
     private String tagClash;
 
     @Pattern(
-            regexp = "^(https://link\\.clashroyale\\.com/invite/friend\\?tag=[A-Z0-9]+)?$",
+            // Accept the base friend link and any extra parameters (e.g. token)
+            regexp = "^(https://link\\.clashroyale\\.com/invite/friend\\?tag=[A-Z0-9]+.*)?$",
             message = "Enlace de amistad inválido"
     )
     private String linkAmistad;
