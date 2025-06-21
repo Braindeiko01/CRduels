@@ -1,17 +1,11 @@
 package com.crduels.domain.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import com.crduels.domain.model.Usuario;
 
 /**
  * Representa una apuesta realizada entre dos jugadores.

@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +38,7 @@ public class MatchmakingService {
      * </ol>
      *
      * @return lista de resultados con los emparejamientos realizados, donde cada
-     *         entrada representa dos apuestas compatibles.
+     * entrada representa dos apuestas compatibles.
      */
     public List<MatchResultDto> ejecutarMatchmaking() {
         List<MatchResultDto> resultados = new ArrayList<>();
@@ -75,5 +78,6 @@ public class MatchmakingService {
     /**
      * Llave para el agrupamiento por monto y modo de juego.
      */
-    private record Key(BigDecimal monto, String modo) { }
+    private record Key(BigDecimal monto, String modo) {
+    }
 }

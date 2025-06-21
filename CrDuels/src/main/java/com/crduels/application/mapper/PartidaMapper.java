@@ -2,10 +2,9 @@ package com.crduels.application.mapper;
 
 import com.crduels.application.dto.PartidaRequestDto;
 import com.crduels.application.dto.PartidaResponseDto;
-import com.crduels.domain.model.Partida;
 import com.crduels.domain.model.Apuesta;
+import com.crduels.domain.model.Partida;
 import com.crduels.domain.model.Usuario;
-
 import org.springframework.stereotype.Component;
 
 @Component

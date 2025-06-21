@@ -1,7 +1,7 @@
 package com.crduels.application.mapper;
 
-import com.crduels.domain.model.Usuario;
 import com.crduels.application.dto.UsuarioDto;
+import com.crduels.domain.model.Usuario;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;

@@ -5,17 +5,15 @@ import com.crduels.application.dto.TransaccionResponseDto;
 import com.crduels.application.mapper.TransaccionMapper;
 import com.crduels.domain.model.EstadoTransaccion;
 import com.crduels.domain.model.Transaccion;
-import com.crduels.domain.model.TipoTransaccion;
 import com.crduels.domain.model.Usuario;
-import com.crduels.infrastructure.repository.UsuarioRepository;
 import com.crduels.infrastructure.repository.TransaccionRepository;
+import com.crduels.infrastructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

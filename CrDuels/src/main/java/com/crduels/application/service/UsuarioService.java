@@ -1,8 +1,8 @@
 package com.crduels.application.service;
 
 import com.crduels.application.dto.UsuarioDto;
-import com.crduels.application.mapper.UsuarioMapper;
 import com.crduels.application.exception.DuplicateUserException;
+import com.crduels.application.mapper.UsuarioMapper;
 import com.crduels.domain.model.Usuario;
 import com.crduels.infrastructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
