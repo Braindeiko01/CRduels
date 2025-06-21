@@ -29,13 +29,32 @@ public class UsuarioService {
             throw new DuplicateUserException("El teléfono ya está registrado");
         }
 
+        // sanitize the Clash Royale tag before persisting
+        String sanitizedTag = sanitizeTag(dto.getTagClash());
+        dto.setTagClash(sanitizedTag);
+
         Usuario usuario = usuarioMapper.toEntity(dto);
+        usuario.setTagClash(sanitizedTag);
         Usuario saved = usuarioRepository.save(usuario);
         return usuarioMapper.toDto(saved);
     }
 
     public Optional<UsuarioDto> obtenerPorId(String id) {
         return usuarioRepository.findById(id).map(usuarioMapper::toDto);
+    }
+
+    /**
+     * Remove a leading '#' from the tag and convert it to upper case.
+     */
+    private String sanitizeTag(String tag) {
+        if (tag == null) {
+            return null;
+        }
+        tag = tag.trim();
+        if (tag.startsWith("#")) {
+            tag = tag.substring(1);
+        }
+        return tag.toUpperCase();
     }
 
 }
