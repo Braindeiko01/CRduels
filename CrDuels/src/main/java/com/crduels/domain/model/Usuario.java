@@ -15,8 +15,12 @@ import java.math.BigDecimal;
 public class Usuario {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
-    private String id;
+    private Long id;
+
+    @Column(name = "google_id", unique = true)
+    private String googleId;
 
     private String nombre;
 

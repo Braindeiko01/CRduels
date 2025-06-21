@@ -17,7 +17,7 @@ import java.util.UUID;
 @Builder
 public class TransaccionResponseDto {
     private UUID id;
-    private String usuarioId;
+    private Long usuarioId;
     private BigDecimal monto;
     private TipoTransaccion tipo;
     private EstadoTransaccion estado;

@@ -12,7 +12,7 @@ public class UsuarioMapper {
             return null;
         }
         return UsuarioDto.builder()
-                .googleId(usuario.getId())
+                .googleId(usuario.getGoogleId())
                 .nombre(usuario.getNombre())
                 .email(usuario.getEmail())
                 .telefono(usuario.getTelefono())
@@ -28,7 +28,7 @@ public class UsuarioMapper {
             return null;
         }
         Usuario usuario = new Usuario();
-        usuario.setId(dto.getGoogleId());
+        usuario.setGoogleId(dto.getGoogleId());
         usuario.setNombre(dto.getNombre());
         usuario.setEmail(dto.getEmail());
         usuario.setTelefono(dto.getTelefono());
