@@ -12,12 +12,14 @@ import com.crduels.infrastructure.repository.ApuestaRepository;
 import com.crduels.infrastructure.repository.TransaccionRepository;
 import com.crduels.infrastructure.repository.UsuarioRepository;
 import com.crduels.infrastructure.repository.PartidaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class PartidaService {
 
@@ -40,17 +42,21 @@ public class PartidaService {
     }
 
     public PartidaResponseDto registrarPartida(PartidaRequestDto dto) {
+        log.debug("Registrando partida {}", dto);
         Partida partida = partidaMapper.toEntity(dto);
         partida.setValidada(false);
         Partida saved = partidaRepository.save(partida);
+        log.debug("Partida registrada con id {}", saved.getId());
         return partidaMapper.toDto(saved);
     }
 
     public Optional<PartidaResponseDto> obtenerPorApuestaId(UUID apuestaId) {
+        log.debug("Buscando partida por apuesta {}", apuestaId);
         return partidaRepository.findByApuesta_Id(apuestaId).map(partidaMapper::toDto);
     }
 
     public PartidaResponseDto marcarComoValidada(UUID partidaId) {
+        log.debug("Marcando partida {} como validada", partidaId);
         Partida partida = partidaRepository.findById(partidaId)
                 .orElseThrow(() -> new IllegalArgumentException("Partida no encontrada"));
         partida.setValidada(true);
@@ -74,6 +80,7 @@ public class PartidaService {
         }
 
         Partida saved = partidaRepository.save(partida);
+        log.debug("Partida {} validada", partidaId);
         return partidaMapper.toDto(saved);
     }
 }

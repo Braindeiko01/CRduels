@@ -9,6 +9,7 @@ import com.crduels.domain.model.TipoTransaccion;
 import com.crduels.domain.model.Usuario;
 import com.crduels.infrastructure.repository.UsuarioRepository;
 import com.crduels.infrastructure.repository.TransaccionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class TransaccionService {
 
@@ -32,20 +34,24 @@ public class TransaccionService {
     }
 
     public TransaccionResponseDto registrarTransaccion(TransaccionRequestDto dto) {
+        log.debug("Registrando transaccion {}", dto);
         Transaccion transaccion = transaccionMapper.toEntity(dto);
         transaccion.setEstado(EstadoTransaccion.PENDIENTE);
         transaccion.setCreadoEn(LocalDateTime.now());
         Transaccion saved = transaccionRepository.save(transaccion);
+        log.debug("Transaccion registrada con id {}", saved.getId());
         return transaccionMapper.toDto(saved);
     }
 
     public List<TransaccionResponseDto> listarPorUsuario(String usuarioId) {
+        log.debug("Listando transacciones para usuario {}", usuarioId);
         return transaccionRepository.findByUsuario_Id(usuarioId).stream()
                 .map(transaccionMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     public TransaccionResponseDto cambiarEstado(UUID transaccionId, EstadoTransaccion estado) {
+        log.debug("Cambiando estado de transaccion {} a {}", transaccionId, estado);
         Transaccion transaccion = transaccionRepository.findById(transaccionId)
                 .orElseThrow(() -> new IllegalArgumentException("Transaccion no encontrada"));
 
@@ -66,6 +72,7 @@ public class TransaccionService {
         }
 
         Transaccion saved = transaccionRepository.save(transaccion);
+        log.debug("Estado actualizado para transaccion {}", transaccionId);
         return transaccionMapper.toDto(saved);
     }
 }

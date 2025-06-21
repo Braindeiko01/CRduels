@@ -7,6 +7,7 @@ import com.crduels.domain.model.Apuesta;
 import com.crduels.domain.model.EstadoApuesta;
 import com.crduels.infrastructure.repository.ApuestaRepository;
 import com.crduels.infrastructure.repository.UsuarioRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ApuestaService {
 
@@ -30,6 +32,7 @@ public class ApuestaService {
     }
 
     public ApuestaResponseDto crearApuesta(ApuestaRequestDto dto) {
+        log.debug("Creando apuesta {}", dto);
         Apuesta apuesta = apuestaMapper.toEntity(dto);
         apuesta.setEstado(EstadoApuesta.PENDIENTE);
         apuesta.setCreadoEn(LocalDateTime.now());
@@ -54,10 +57,12 @@ public class ApuestaService {
         }
 
         Apuesta saved = apuestaRepository.save(apuesta);
+        log.debug("Apuesta creada con id {}", saved.getId());
         return apuestaMapper.toDto(saved);
     }
 
     public List<ApuestaResponseDto> listarPendientesPorModo(String modoJuego) {
+        log.debug("Listando apuestas pendientes para modo {}", modoJuego);
         return apuestaRepository.findByEstado(EstadoApuesta.PENDIENTE).stream()
                 .filter(a -> a.getModoJuego().equalsIgnoreCase(modoJuego))
                 .map(apuestaMapper::toDto)
@@ -65,10 +70,12 @@ public class ApuestaService {
     }
 
     public ApuestaResponseDto cambiarEstado(UUID id, EstadoApuesta estado) {
+        log.debug("Cambiando estado de apuesta {} a {}", id, estado);
         Apuesta apuesta = apuestaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Apuesta no encontrada"));
         apuesta.setEstado(estado);
         Apuesta saved = apuestaRepository.save(apuesta);
+        log.debug("Estado actualizado para apuesta {}", id);
         return apuestaMapper.toDto(saved);
     }
 }

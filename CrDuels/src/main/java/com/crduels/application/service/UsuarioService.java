@@ -6,10 +6,12 @@ import com.crduels.application.mapper.UsuarioMapper;
 import com.crduels.application.exception.DuplicateUserException;
 import com.crduels.domain.model.Usuario;
 import com.crduels.infrastructure.repository.UsuarioRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UsuarioService {
 
@@ -22,6 +24,7 @@ public class UsuarioService {
     }
 
     public UsuarioDto registrarUsuario(UsuarioDto dto) {
+        log.debug("Registrando usuario DTO: {}", dto);
         if (usuarioRepository.existsByEmail(dto.getEmail())) {
             throw new DuplicateUserException("El email ya está registrado");
         }
@@ -37,6 +40,7 @@ public class UsuarioService {
         Usuario usuario = usuarioMapper.toEntity(dto);
         usuario.setTagClash(sanitizedTag);
         Usuario saved = usuarioRepository.save(usuario);
+        log.debug("Usuario persistido con id {}", saved.getId());
         return usuarioMapper.toDto(saved);
     }
 
@@ -46,6 +50,7 @@ public class UsuarioService {
      * sin crear uno nuevo.
      */
     public Usuario registrarUsuario(GoogleUserData googleData) {
+        log.debug("Registrando usuario Google: {}", googleData);
         return usuarioRepository.findById(googleData.getGoogleId())
                 .orElseGet(() -> {
                     Usuario nuevo = new Usuario();
@@ -58,6 +63,7 @@ public class UsuarioService {
     }
 
     public Optional<UsuarioDto> obtenerPorId(String id) {
+        log.debug("Buscando usuario por id {}", id);
         return usuarioRepository.findById(id).map(usuarioMapper::toDto);
     }
 
@@ -69,6 +75,7 @@ public class UsuarioService {
             return null;
         }
         tag = tag.trim();
+        log.debug("Sanitizando tag {}", tag);
         if (tag.startsWith("#")) {
             tag = tag.substring(1);
         }

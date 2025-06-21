@@ -5,12 +5,14 @@ import com.crduels.domain.model.Apuesta;
 import com.crduels.domain.model.EstadoApuesta;
 import com.crduels.infrastructure.repository.ApuestaRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MatchmakingService {
@@ -38,10 +40,12 @@ public class MatchmakingService {
      *         entrada representa dos apuestas compatibles.
      */
     public List<MatchResultDto> ejecutarMatchmaking() {
+        log.debug("Ejecutando matchmaking");
         List<MatchResultDto> resultados = new ArrayList<>();
 
         // 1. Obtener todas las apuestas pendientes
         List<Apuesta> pendientes = apuestaRepository.findByEstado(EstadoApuesta.PENDIENTE);
+        log.debug("Apuestas pendientes encontradas: {}", pendientes.size());
 
         // 2. Agrupar por monto y modo de juego
         Map<Key, List<Apuesta>> grupos = pendientes.stream()
@@ -59,6 +63,7 @@ public class MatchmakingService {
                 // opcional: registrar hora de emparejamiento si existiera campo
 
                 apuestaRepository.saveAll(Arrays.asList(a1, a2));
+                log.debug("Emparejadas apuestas {} y {}", a1.getId(), a2.getId());
 
                 resultados.add(new MatchResultDto(
                         a1.getId(),
@@ -69,6 +74,7 @@ public class MatchmakingService {
             }
         }
 
+        log.debug("Total de emparejamientos: {}", resultados.size());
         return resultados;
     }
 
