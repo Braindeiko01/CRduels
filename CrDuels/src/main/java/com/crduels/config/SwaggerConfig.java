@@ -17,11 +17,15 @@ public class SwaggerConfig {
                 .url("https://crduels-crduelsproduction.up.railway.app")
                 .description("Producción - Railway");
 
+        Server localServer = new Server()
+                .url("http://localhost:8080")
+                .description("Desarrollo Local");
+
         return new OpenAPI()
                 .info(new Info()
                         .title("CRDuels API")
                         .version("1.0")
                         .description("Documentación para CRDuels"))
-                .servers(List.of(prodServer));
+                .servers(List.of(localServer, prodServer)); // orden importa, local primero
     }
 }
