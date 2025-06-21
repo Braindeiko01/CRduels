@@ -8,8 +8,11 @@ import com.crduels.infrastructure.dto.rs.TransaccionResponse;
 import com.crduels.infrastructure.mapper.TransaccionMapper;
 import com.crduels.infrastructure.repository.TransaccionRepository;
 import com.crduels.infrastructure.repository.UsuarioRepository;
+import com.crduels.application.events.TransaccionAprobadaEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +25,7 @@ public class TransaccionService {
     private final TransaccionRepository transaccionRepository;
     private final TransaccionMapper transaccionMapper;
     private final UsuarioRepository usuarioRepository;
-    private final SseService sseService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public TransaccionResponse registrarTransaccion(TransaccionRequest dto) {
         Transaccion transaccion = transaccionMapper.toEntity(dto);
@@ -38,6 +41,7 @@ public class TransaccionService {
                 .toList();
     }
 
+    @Transactional
     public TransaccionResponse aprobarTransaccion(UUID id) {
         Transaccion transaccion = transaccionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaccion no encontrada"));
@@ -52,7 +56,7 @@ public class TransaccionService {
         Transaccion saved = transaccionRepository.save(transaccion);
 
         TransaccionResponse dto = transaccionMapper.toDto(saved);
-        sseService.notificarTransaccionAprobada(dto);
+        eventPublisher.publishEvent(new TransaccionAprobadaEvent(dto));
         return dto;
     }
 

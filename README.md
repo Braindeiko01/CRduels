@@ -15,12 +15,14 @@ The runnable JAR will be created in `CrDuels/target`.
 
 ## Configuration
 
-Database settings are defined in `CrDuels/src/main/resources/application.properties`. Update the PostgreSQL URL, username and password according to your environment.
+Database settings are defined in `CrDuels/src/main/resources/application.yml`. Update the PostgreSQL URL, username and password according to your environment. Profiles `application-dev.yml` and `application-prod.yml` provide local and production defaults.
 
-```
-spring.datasource.url=jdbc:postgresql://<host>:<port>/crduels
-spring.datasource.username=<user>
-spring.datasource.password=<password>
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://<host>:<port>/crduels
+    username: <user>
+    password: <password>
 ```
 
 ## API Usage
@@ -36,7 +38,7 @@ Examples using `curl`:
 * Register a user
 
 ```bash
-curl -X POST http://localhost:8080/api/usuarios/registro \
+curl -X POST http://localhost:8080/api/usuarios \
   -H 'Content-Type: application/json' \
   -d '{"googleId":"gid123","nombre":"Ejemplo","email":"ejemplo@correo.com","telefono":"+52123456789","tagClash":"#ABC123","linkAmistad":"https://link.clashroyale.com/invite/friend?tag=ABC123&token=XYZ"}'
 ```
