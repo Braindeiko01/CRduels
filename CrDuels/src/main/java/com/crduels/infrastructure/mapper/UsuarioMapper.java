@@ -1,7 +1,8 @@
 package com.crduels.infrastructure.mapper;
 
-import com.crduels.infrastructure.dto.UsuarioDto;
+import com.crduels.infrastructure.dto.rq.UsuarioRequest;
 import com.crduels.domain.entity.Usuario;
+import com.crduels.infrastructure.dto.rs.UsuarioResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
@@ -12,20 +13,23 @@ public class UsuarioMapper {
 
     private static final Pattern TAG_PATTERN = Pattern.compile("tag=([^&]+)");
 
-    public UsuarioDto toDto(Usuario usuario) {
+    public UsuarioResponse toDto(Usuario usuario) {
         if (usuario == null) {
             return null;
         }
-        return UsuarioDto.builder()
+        return UsuarioResponse.builder()
                 .id(usuario.getId())
                 .nombre(usuario.getNombre())
                 .email(usuario.getEmail())
                 .telefono(usuario.getTelefono())
+                .tagClash(usuario.getTagClash())
                 .linkAmistad(usuario.getLinkAmistad())
+                .saldo(usuario.getSaldo())
+                .reputacion(usuario.getReputacion())
                 .build();
     }
 
-    public Usuario toEntity(UsuarioDto dto) {
+    public Usuario toEntity(UsuarioRequest dto) {
         if (dto == null) {
             return null;
         }

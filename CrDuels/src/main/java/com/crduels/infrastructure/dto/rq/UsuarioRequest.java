@@ -1,4 +1,4 @@
-package com.crduels.infrastructure.dto;
+package com.crduels.infrastructure.dto.rq;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UsuarioDto implements Serializable {
+public class UsuarioRequest implements Serializable {
     @Serial
     private static final long serialVersionUID = -1079360589218994359L;
 
