@@ -39,7 +39,7 @@ public class TransaccionService {
         return transaccionMapper.toDto(saved);
     }
 
-    public List<TransaccionResponseDto> listarPorUsuario(String usuarioId) {
+    public List<TransaccionResponseDto> listarPorUsuario(Long usuarioId) {
         return transaccionRepository.findByUsuario_Id(usuarioId).stream()
                 .map(transaccionMapper::toDto)
                 .collect(Collectors.toList());

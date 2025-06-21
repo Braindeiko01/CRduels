@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class ApuestaRequestDto {
-    private String jugador1Id;
-    private String jugador2Id;
+    private Long jugador1Id;
+    private Long jugador2Id;
     private BigDecimal monto;
     private String modoJuego;
 }

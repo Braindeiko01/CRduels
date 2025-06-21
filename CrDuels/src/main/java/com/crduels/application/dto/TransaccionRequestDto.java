@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class TransaccionRequestDto {
-    private String usuarioId;
+    private Long usuarioId;
     private BigDecimal monto;
     private TipoTransaccion tipo;
 }

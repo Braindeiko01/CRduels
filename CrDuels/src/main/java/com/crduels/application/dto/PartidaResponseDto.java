@@ -15,7 +15,7 @@ import java.util.UUID;
 public class PartidaResponseDto {
     private UUID id;
     private UUID apuestaId;
-    private String ganadorId;
+    private Long ganadorId;
     private boolean validada;
     private LocalDateTime validadaEn;
 }

@@ -46,10 +46,10 @@ public class UsuarioService {
      * sin crear uno nuevo.
      */
     public Usuario registrarUsuario(GoogleUserData googleData) {
-        return usuarioRepository.findById(googleData.getGoogleId())
+        return usuarioRepository.findByGoogleId(googleData.getGoogleId())
                 .orElseGet(() -> {
                     Usuario nuevo = new Usuario();
-                    nuevo.setId(googleData.getGoogleId());
+                    nuevo.setGoogleId(googleData.getGoogleId());
                     nuevo.setNombre(googleData.getNombre());
                     nuevo.setEmail(googleData.getEmail());
                     // Campo imagen no se almacena actualmente en la entidad
@@ -57,7 +57,7 @@ public class UsuarioService {
                 });
     }
 
-    public Optional<UsuarioDto> obtenerPorId(String id) {
+    public Optional<UsuarioDto> obtenerPorId(Long id) {
         return usuarioRepository.findById(id).map(usuarioMapper::toDto);
     }
 
