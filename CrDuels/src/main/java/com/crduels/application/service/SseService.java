@@ -24,7 +24,7 @@ public class SseService {
         return emitter;
     }
 
-    public void enviarTransaccionAprobada(TransaccionResponse dto) {
+    public void notificarTransaccionAprobada(TransaccionResponse dto) {
         List<SseEmitter> muertos = new ArrayList<>();
         for (SseEmitter emitter : emitters) {
             try {

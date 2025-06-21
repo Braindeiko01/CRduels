@@ -20,11 +20,12 @@ import java.util.UUID;
 public class TransaccionResponse implements Serializable {
     @Serial
     private static final long serialVersionUID = -1358964053489023581L;
-    
+
     private UUID id;
     private String usuarioId;
     private BigDecimal monto;
     private TipoTransaccion tipo;
     private EstadoTransaccion estado;
     private LocalDateTime creadoEn;
+
 }

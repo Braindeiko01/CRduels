@@ -38,37 +38,38 @@ public class TransaccionService {
                 .toList();
     }
 
-    public TransaccionResponse aprobarTransaccion(UUID transaccionId) {
-        return cambiarEstado(transaccionId, EstadoTransaccion.APROBADA);
-    }
-
-    public TransaccionResponse cambiarEstado(UUID transaccionId, EstadoTransaccion estado) {
-        Transaccion transaccion = transaccionRepository.findById(transaccionId)
+    public TransaccionResponse aprobarTransaccion(UUID id) {
+        Transaccion transaccion = transaccionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaccion no encontrada"));
 
-        if (transaccion.getEstado() != estado) {
-            transaccion.setEstado(estado);
-
-            if (estado == EstadoTransaccion.APROBADA) {
-                Usuario usuario = usuarioRepository.findById(transaccion.getUsuario().getId())
-                        .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-
-                switch (transaccion.getTipo()) {
-                    case DEPOSITO, PREMIO -> usuario.setSaldo(usuario.getSaldo().add(transaccion.getMonto()));
-                    case RETIRO -> usuario.setSaldo(usuario.getSaldo().subtract(transaccion.getMonto()));
-                }
-
-                usuarioRepository.save(usuario);
-            }
+        if (EstadoTransaccion.APROBADA.equals(transaccion.getEstado())) {
+            throw new IllegalArgumentException("La transaccion ya ha sido aprobada con anterioridad");
         }
 
+        modificarSaldoUsuario(transaccion);
+
+        transaccion.setEstado(EstadoTransaccion.APROBADA);
         Transaccion saved = transaccionRepository.save(transaccion);
 
         TransaccionResponse dto = transaccionMapper.toDto(saved);
-        if (estado == EstadoTransaccion.APROBADA) {
-            sseService.enviarTransaccionAprobada(dto);
+        sseService.notificarTransaccionAprobada(dto);
+        return dto;
+    }
+
+    private void modificarSaldoUsuario(Transaccion transaccion) {
+        Usuario usuario = usuarioRepository.findById(transaccion.getUsuario().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        switch (transaccion.getTipo()) {
+            case DEPOSITO, PREMIO -> usuario.setSaldo(usuario.getSaldo().add(transaccion.getMonto()));
+            case RETIRO, APUESTA -> {
+                if (usuario.getSaldo().compareTo(transaccion.getMonto()) < 0) {
+                    throw new IllegalArgumentException("Saldo insuficiente para realizar la transacción");
+                }
+                usuario.setSaldo(usuario.getSaldo().subtract(transaccion.getMonto()));
+            }
         }
 
-        return dto;
+        usuarioRepository.save(usuario);
     }
 }
