@@ -2,7 +2,6 @@ package com.crduels.application.controller;
 
 import com.crduels.application.service.UsuarioService;
 import com.crduels.infrastructure.dto.UsuarioDto;
-import com.crduels.infrastructure.exception.DuplicateUserException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -14,30 +13,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
 
 
 @RestController
 @RequestMapping("/api/usuarios")
 @Tag(name = "Usuarios", description = "Operaciones de usuarios")
+@RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
-
-    @PostMapping("/registro")
+    @PostMapping
     @Operation(summary = "Registrar usuario", description = "Registra un nuevo usuario")
-    public ResponseEntity<?> registrar(@Valid @RequestBody UsuarioDto usuario) {
-        try {
-            UsuarioDto nuevo = usuarioService.registrarUsuario(usuario);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
-        } catch (DuplicateUserException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<UsuarioDto> registrar(@Valid @RequestBody UsuarioDto usuario) {
+        UsuarioDto nuevo = usuarioService.registrarUsuario(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
     @GetMapping("/{id}")

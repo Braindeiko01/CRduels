@@ -10,6 +10,7 @@ import com.crduels.infrastructure.repository.TransaccionRepository;
 import com.crduels.infrastructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -36,6 +37,7 @@ public class PartidaService {
         return partidaRepository.findByApuesta_Id(apuestaId).map(partidaMapper::toDto);
     }
 
+    @Transactional
     public PartidaResponse marcarComoValidada(UUID partidaId) {
         Partida partida = partidaRepository.findById(partidaId)
                 .orElseThrow(() -> new IllegalArgumentException("Partida no encontrada"));

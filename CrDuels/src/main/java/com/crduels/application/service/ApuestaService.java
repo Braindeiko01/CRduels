@@ -13,6 +13,7 @@ import com.crduels.infrastructure.repository.ApuestaRepository;
 import com.crduels.infrastructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +29,7 @@ public class ApuestaService {
     private final UsuarioRepository usuarioRepository;
     private final TransaccionService transaccionService;
 
+    @Transactional
     public ApuestaResponse crearApuesta(ApuestaRequest dto) {
         Apuesta apuesta = apuestaMapper.toEntity(dto);
         apuesta.setEstado(EstadoApuesta.PENDIENTE);
