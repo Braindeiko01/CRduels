@@ -1,7 +1,7 @@
-package com.crduels.application.mapper;
+package com.crduels.application.apuesta.mapper;
 
-import com.crduels.application.dto.ApuestaRequestDto;
-import com.crduels.application.dto.ApuestaResponseDto;
+import com.crduels.application.apuesta.dto.ApuestaRequestDto;
+import com.crduels.application.apuesta.dto.ApuestaResponseDto;
 import com.crduels.domain.model.Apuesta;
 import com.crduels.domain.model.Usuario;
 import org.springframework.stereotype.Component;
@@ -13,20 +13,20 @@ public class ApuestaMapper {
         if (dto == null) {
             return null;
         }
-        Apuesta apuesta = new Apuesta();
+        Apuesta.ApuestaBuilder builder = Apuesta.builder()
+                .monto(dto.getMonto())
+                .modoJuego(dto.getModoJuego());
+
         if (dto.getJugador1Id() != null) {
-            Usuario jugador1 = new Usuario();
-            jugador1.setId(dto.getJugador1Id());
-            apuesta.setJugador1(jugador1);
+            Usuario jugador1 = Usuario.builder().id(dto.getJugador1Id()).build();
+            builder.jugador1(jugador1);
         }
         if (dto.getJugador2Id() != null) {
-            Usuario jugador2 = new Usuario();
-            jugador2.setId(dto.getJugador2Id());
-            apuesta.setJugador2(jugador2);
+            Usuario jugador2 = Usuario.builder().id(dto.getJugador2Id()).build();
+            builder.jugador2(jugador2);
         }
-        apuesta.setMonto(dto.getMonto());
-        apuesta.setModoJuego(dto.getModoJuego());
-        return apuesta;
+
+        return builder.build();
     }
 
     public ApuestaResponseDto toDto(Apuesta entity) {

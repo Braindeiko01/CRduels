@@ -1,7 +1,7 @@
-package com.crduels.application.mapper;
+package com.crduels.application.partida.mapper;
 
-import com.crduels.application.dto.PartidaRequestDto;
-import com.crduels.application.dto.PartidaResponseDto;
+import com.crduels.application.partida.dto.PartidaRequestDto;
+import com.crduels.application.partida.dto.PartidaResponseDto;
 import com.crduels.domain.model.Apuesta;
 import com.crduels.domain.model.Partida;
 import com.crduels.domain.model.Usuario;
@@ -14,19 +14,17 @@ public class PartidaMapper {
         if (dto == null) {
             return null;
         }
-        Partida partida = new Partida();
+        Partida.PartidaBuilder builder = Partida.builder()
+                .resultadoJson(dto.getResultadoJson());
         if (dto.getApuestaId() != null) {
-            Apuesta apuesta = new Apuesta();
-            apuesta.setId(dto.getApuestaId());
-            partida.setApuesta(apuesta);
+            Apuesta apuesta = Apuesta.builder().id(dto.getApuestaId()).build();
+            builder.apuesta(apuesta);
         }
         if (dto.getGanadorId() != null) {
-            Usuario ganador = new Usuario();
-            ganador.setId(dto.getGanadorId());
-            partida.setGanador(ganador);
+            Usuario ganador = Usuario.builder().id(dto.getGanadorId()).build();
+            builder.ganador(ganador);
         }
-        partida.setResultadoJson(dto.getResultadoJson());
-        return partida;
+        return builder.build();
     }
 
     public PartidaResponseDto toDto(Partida entity) {

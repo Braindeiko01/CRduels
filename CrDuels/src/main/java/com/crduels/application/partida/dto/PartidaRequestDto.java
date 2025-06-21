@@ -1,24 +1,21 @@
-package com.crduels.application.dto;
+package com.crduels.application.partida.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * DTO para responder con la información de una partida.
+ * DTO para la creación de partidas.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PartidaResponseDto {
-    private UUID id;
+public class PartidaRequestDto {
     private UUID apuestaId;
     private String ganadorId;
-    private boolean validada;
-    private LocalDateTime validadaEn;
+    private String resultadoJson;
 }

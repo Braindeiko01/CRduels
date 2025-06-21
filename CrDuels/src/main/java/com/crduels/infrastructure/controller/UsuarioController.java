@@ -1,16 +1,19 @@
 package com.crduels.infrastructure.controller;
 
-import com.crduels.application.dto.UsuarioDto;
+import com.crduels.application.usuario.dto.UsuarioDto;
 import com.crduels.application.exception.DuplicateUserException;
-import com.crduels.application.service.UsuarioService;
+import com.crduels.application.usuario.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 @RestController
 @RequestMapping("/api/usuarios")
+@Tag(name = "Usuarios", description = "Operaciones de usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -20,6 +23,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/registro")
+    @Operation(summary = "Registrar usuario", description = "Registra un nuevo usuario")
     public ResponseEntity<?> registrar(@Valid @RequestBody UsuarioDto usuario) {
         try {
             UsuarioDto nuevo = usuarioService.registrarUsuario(usuario);
@@ -32,6 +36,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener usuario", description = "Obtiene un usuario por su identificador")
     public ResponseEntity<UsuarioDto> obtener(@PathVariable String id) {
         return usuarioService.obtenerPorId(id)
                 .map(ResponseEntity::ok)

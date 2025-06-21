@@ -1,6 +1,6 @@
-package com.crduels.application.service;
+package com.crduels.application.matchmaking.service;
 
-import com.crduels.application.dto.MatchResultDto;
+import com.crduels.application.matchmaking.dto.MatchResultDto;
 import com.crduels.domain.model.Apuesta;
 import com.crduels.domain.model.EstadoApuesta;
 import com.crduels.infrastructure.repository.ApuestaRepository;

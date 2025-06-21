@@ -1,8 +1,8 @@
-package com.crduels.application.service;
+package com.crduels.application.apuesta.service;
 
-import com.crduels.application.dto.ApuestaRequestDto;
-import com.crduels.application.dto.ApuestaResponseDto;
-import com.crduels.application.mapper.ApuestaMapper;
+import com.crduels.application.apuesta.dto.ApuestaRequestDto;
+import com.crduels.application.apuesta.dto.ApuestaResponseDto;
+import com.crduels.application.apuesta.mapper.ApuestaMapper;
 import com.crduels.domain.model.Apuesta;
 import com.crduels.domain.model.EstadoApuesta;
 import com.crduels.infrastructure.repository.ApuestaRepository;
