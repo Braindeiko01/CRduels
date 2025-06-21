@@ -2,7 +2,7 @@ package com.crduels.application.controller;
 
 import com.crduels.infrastructure.dto.TransaccionRequestDto;
 import com.crduels.infrastructure.dto.TransaccionResponseDto;
-import com.crduels.infrastructure.service.TransaccionService;
+import com.crduels.application.service.TransaccionService;
 import com.crduels.domain.entity.EstadoTransaccion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

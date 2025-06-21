@@ -1,4 +1,4 @@
-package com.crduels.domain.repository;
+package com.crduels.infrastructure.repository;
 
 import com.crduels.domain.entity.Apuesta;
 import com.crduels.domain.entity.EstadoApuesta;

@@ -2,7 +2,7 @@ package com.crduels.application.controller;
 
 import com.crduels.infrastructure.dto.PartidaRequestDto;
 import com.crduels.infrastructure.dto.PartidaResponseDto;
-import com.crduels.infrastructure.service.PartidaService;
+import com.crduels.application.service.PartidaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

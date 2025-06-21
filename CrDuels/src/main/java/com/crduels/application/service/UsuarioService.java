@@ -1,10 +1,10 @@
-package com.crduels.infrastructure.service;
+package com.crduels.application.service;
 
 import com.crduels.infrastructure.dto.UsuarioDto;
 import com.crduels.infrastructure.exception.DuplicateUserException;
 import com.crduels.infrastructure.mapper.UsuarioMapper;
 import com.crduels.domain.entity.Usuario;
-import com.crduels.domain.repository.UsuarioRepository;
+import com.crduels.infrastructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

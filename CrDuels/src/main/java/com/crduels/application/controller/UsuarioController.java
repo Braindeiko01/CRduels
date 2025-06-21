@@ -2,7 +2,7 @@ package com.crduels.application.controller;
 
 import com.crduels.infrastructure.dto.UsuarioDto;
 import com.crduels.infrastructure.exception.DuplicateUserException;
-import com.crduels.infrastructure.service.UsuarioService;
+import com.crduels.application.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.crduels.application.controller;
 
 import com.crduels.infrastructure.dto.MatchResultDto;
-import com.crduels.infrastructure.service.MatchmakingService;
+import com.crduels.application.service.MatchmakingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

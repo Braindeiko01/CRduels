@@ -1,12 +1,12 @@
-package com.crduels.infrastructure.service;
+package com.crduels.application.service;
 
 import com.crduels.infrastructure.dto.ApuestaRequestDto;
 import com.crduels.infrastructure.dto.ApuestaResponseDto;
 import com.crduels.infrastructure.mapper.ApuestaMapper;
 import com.crduels.domain.entity.Apuesta;
 import com.crduels.domain.entity.EstadoApuesta;
-import com.crduels.domain.repository.ApuestaRepository;
-import com.crduels.domain.repository.UsuarioRepository;
+import com.crduels.infrastructure.repository.ApuestaRepository;
+import com.crduels.infrastructure.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

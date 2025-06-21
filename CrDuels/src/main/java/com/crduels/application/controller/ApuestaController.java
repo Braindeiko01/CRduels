@@ -2,7 +2,7 @@ package com.crduels.application.controller;
 
 import com.crduels.infrastructure.dto.ApuestaRequestDto;
 import com.crduels.infrastructure.dto.ApuestaResponseDto;
-import com.crduels.infrastructure.service.ApuestaService;
+import com.crduels.application.service.ApuestaService;
 import com.crduels.domain.entity.EstadoApuesta;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

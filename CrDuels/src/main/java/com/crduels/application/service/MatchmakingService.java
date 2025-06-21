@@ -1,9 +1,9 @@
-package com.crduels.infrastructure.service;
+package com.crduels.application.service;
 
 import com.crduels.infrastructure.dto.MatchResultDto;
 import com.crduels.domain.entity.Apuesta;
 import com.crduels.domain.entity.EstadoApuesta;
-import com.crduels.domain.repository.ApuestaRepository;
+import com.crduels.infrastructure.repository.ApuestaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,13 +1,13 @@
-package com.crduels.infrastructure.service;
+package com.crduels.application.service;
 
 import com.crduels.infrastructure.dto.PartidaRequestDto;
 import com.crduels.infrastructure.dto.PartidaResponseDto;
 import com.crduels.infrastructure.mapper.PartidaMapper;
 import com.crduels.domain.entity.*;
-import com.crduels.domain.repository.ApuestaRepository;
-import com.crduels.domain.repository.PartidaRepository;
-import com.crduels.domain.repository.TransaccionRepository;
-import com.crduels.domain.repository.UsuarioRepository;
+import com.crduels.infrastructure.repository.ApuestaRepository;
+import com.crduels.infrastructure.repository.PartidaRepository;
+import com.crduels.infrastructure.repository.TransaccionRepository;
+import com.crduels.infrastructure.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
