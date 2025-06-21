@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -15,12 +16,8 @@ import java.math.BigDecimal;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true)
-    private Long id;
-
-    @Column(name = "google_id", unique = true)
-    private String googleId;
+    @Column(name = "id", unique = true)
+    private String id;
 
     private String nombre;
 

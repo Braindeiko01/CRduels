@@ -13,6 +13,6 @@ import java.util.UUID;
 @Builder
 public class PartidaRequestDto {
     private UUID apuestaId;
-    private Long ganadorId;
+    private String ganadorId;
     private String resultadoJson;
 }
