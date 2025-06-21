@@ -38,6 +38,13 @@ public class TransaccionController {
         return ResponseEntity.ok(lista);
     }
 
+    @PostMapping("/{id}/aprobar")
+    @Operation(summary = "Aprobar transacción", description = "Aprueba la transacción y actualiza el saldo")
+    public ResponseEntity<TransaccionResponseDto> aprobar(@PathVariable UUID id) {
+        TransaccionResponseDto response = transaccionService.aprobarTransaccion(id);
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/{id}/estado")
     @Operation(summary = "Cambiar estado", description = "Actualiza el estado de una transacción")
     public ResponseEntity<TransaccionResponseDto> cambiarEstado(@PathVariable UUID id,

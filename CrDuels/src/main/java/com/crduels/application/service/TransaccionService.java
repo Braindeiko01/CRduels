@@ -22,6 +22,7 @@ public class TransaccionService {
     private final TransaccionRepository transaccionRepository;
     private final TransaccionMapper transaccionMapper;
     private final UsuarioRepository usuarioRepository;
+    private final SseService sseService;
 
     public TransaccionResponseDto registrarTransaccion(TransaccionRequestDto dto) {
         Transaccion transaccion = transaccionMapper.toEntity(dto);
@@ -35,6 +36,10 @@ public class TransaccionService {
         return transaccionRepository.findByUsuario_Id(usuarioId).stream()
                 .map(transaccionMapper::toDto)
                 .toList();
+    }
+
+    public TransaccionResponseDto aprobarTransaccion(UUID transaccionId) {
+        return cambiarEstado(transaccionId, EstadoTransaccion.APROBADA);
     }
 
     public TransaccionResponseDto cambiarEstado(UUID transaccionId, EstadoTransaccion estado) {
@@ -58,6 +63,12 @@ public class TransaccionService {
         }
 
         Transaccion saved = transaccionRepository.save(transaccion);
-        return transaccionMapper.toDto(saved);
+
+        TransaccionResponseDto dto = transaccionMapper.toDto(saved);
+        if (estado == EstadoTransaccion.APROBADA) {
+            sseService.enviarTransaccionAprobada(dto);
+        }
+
+        return dto;
     }
 }
