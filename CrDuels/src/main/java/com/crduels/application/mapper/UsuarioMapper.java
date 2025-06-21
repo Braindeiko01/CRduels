@@ -35,16 +35,13 @@ public class UsuarioMapper {
         usuario.setNombre(dto.getNombre());
         usuario.setEmail(dto.getEmail());
         usuario.setTelefono(dto.getTelefono());
-        usuario.setTagClash(extractTagFromUrl(dto.getEmail()));
+        usuario.setTagClash(extractTagFromUrl(dto.getLinkAmistad()));
         usuario.setLinkAmistad(dto.getLinkAmistad());
 
         return usuario;
     }
 
-    public String extractTagFromUrl(String url) {
-        if (url == null || url.isEmpty()) {
-            return null;
-        }
+    public static String extractTagFromUrl(String url) {
 
         Matcher matcher = TAG_PATTERN.matcher(url);
         if (matcher.find()) {
