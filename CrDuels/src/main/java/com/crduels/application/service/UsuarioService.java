@@ -1,6 +1,7 @@
 package com.crduels.application.service;
 
 import com.crduels.application.dto.UsuarioDto;
+import com.crduels.application.dto.GoogleUserData;
 import com.crduels.application.mapper.UsuarioMapper;
 import com.crduels.application.exception.DuplicateUserException;
 import com.crduels.domain.model.Usuario;
@@ -32,6 +33,23 @@ public class UsuarioService {
         Usuario usuario = usuarioMapper.toEntity(dto);
         Usuario saved = usuarioRepository.save(usuario);
         return usuarioMapper.toDto(saved);
+    }
+
+    /**
+     * Registra un usuario a partir de los datos proporcionados por Google.
+     * Si ya existe un usuario con el mismo identificador se devuelve tal cual
+     * sin crear uno nuevo.
+     */
+    public Usuario registrarUsuario(GoogleUserData googleData) {
+        return usuarioRepository.findById(googleData.getGoogleId())
+                .orElseGet(() -> {
+                    Usuario nuevo = new Usuario();
+                    nuevo.setId(googleData.getGoogleId());
+                    nuevo.setNombre(googleData.getNombre());
+                    nuevo.setEmail(googleData.getEmail());
+                    // Campo imagen no se almacena actualmente en la entidad
+                    return usuarioRepository.save(nuevo);
+                });
     }
 
     public Optional<UsuarioDto> obtenerPorId(String id) {
