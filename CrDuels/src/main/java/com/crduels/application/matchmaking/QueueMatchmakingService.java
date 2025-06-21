@@ -12,11 +12,14 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Servicio responsable de gestionar el emparejamiento de apuestas.
+ * Servicio responsable de gestionar el emparejamiento de apuestas en
+ * memoria utilizando colas FIFO. Se mantiene separado del servicio de
+ * {@code application.service.MatchmakingService} que opera sobre la base
+ * de datos.
  */
 @Service
 @RequiredArgsConstructor
-public class MatchmakingService {
+public class QueueMatchmakingService {
 
     private final MatchmakingQueue matchmakingQueue;
 
