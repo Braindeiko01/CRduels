@@ -5,16 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 
-/**
- * DTO para la creación de partidas.
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PartidaRequest {
+public class PartidaRequest implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -6246739242263766423L;
+
     private UUID apuestaId;
     private String ganadorId;
     private String resultadoJson;

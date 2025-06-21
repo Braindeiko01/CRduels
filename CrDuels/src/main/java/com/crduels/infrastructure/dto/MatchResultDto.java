@@ -5,17 +5,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-/**
- * DTO que representa el resultado de un emparejamiento entre dos apuestas.
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MatchResultDto {
+public class MatchResultDto implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -8418829763317647957L;
+
     private UUID apuesta1Id;
     private UUID apuesta2Id;
     private BigDecimal monto;
