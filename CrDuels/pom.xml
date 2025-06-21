@@ -137,7 +137,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.crduels.CrDuelsBackendApplication</mainClass>
+                    <mainClass>com.crduels.Application</mainClass>
                 </configuration>
             </plugin>
             <plugin>

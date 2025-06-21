@@ -1,7 +1,7 @@
 package com.crduels.application.service;
 
-import com.crduels.infrastructure.dto.TransaccionRequestDto;
-import com.crduels.infrastructure.dto.TransaccionResponseDto;
+import com.crduels.infrastructure.dto.rq.TransaccionRequest;
+import com.crduels.infrastructure.dto.rs.TransaccionResponse;
 import com.crduels.infrastructure.mapper.TransaccionMapper;
 import com.crduels.domain.entity.EstadoTransaccion;
 import com.crduels.domain.entity.Transaccion;
@@ -24,7 +24,7 @@ public class TransaccionService {
     private final UsuarioRepository usuarioRepository;
     private final SseService sseService;
 
-    public TransaccionResponseDto registrarTransaccion(TransaccionRequestDto dto) {
+    public TransaccionResponse registrarTransaccion(TransaccionRequest dto) {
         Transaccion transaccion = transaccionMapper.toEntity(dto);
         transaccion.setEstado(EstadoTransaccion.PENDIENTE);
         transaccion.setCreadoEn(LocalDateTime.now());
@@ -32,17 +32,17 @@ public class TransaccionService {
         return transaccionMapper.toDto(saved);
     }
 
-    public List<TransaccionResponseDto> listarPorUsuario(String usuarioId) {
+    public List<TransaccionResponse> listarPorUsuario(String usuarioId) {
         return transaccionRepository.findByUsuario_Id(usuarioId).stream()
                 .map(transaccionMapper::toDto)
                 .toList();
     }
 
-    public TransaccionResponseDto aprobarTransaccion(UUID transaccionId) {
+    public TransaccionResponse aprobarTransaccion(UUID transaccionId) {
         return cambiarEstado(transaccionId, EstadoTransaccion.APROBADA);
     }
 
-    public TransaccionResponseDto cambiarEstado(UUID transaccionId, EstadoTransaccion estado) {
+    public TransaccionResponse cambiarEstado(UUID transaccionId, EstadoTransaccion estado) {
         Transaccion transaccion = transaccionRepository.findById(transaccionId)
                 .orElseThrow(() -> new IllegalArgumentException("Transaccion no encontrada"));
 
@@ -64,7 +64,7 @@ public class TransaccionService {
 
         Transaccion saved = transaccionRepository.save(transaccion);
 
-        TransaccionResponseDto dto = transaccionMapper.toDto(saved);
+        TransaccionResponse dto = transaccionMapper.toDto(saved);
         if (estado == EstadoTransaccion.APROBADA) {
             sseService.enviarTransaccionAprobada(dto);
         }

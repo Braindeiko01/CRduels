@@ -1,7 +1,7 @@
 package com.crduels.application.controller;
 
-import com.crduels.infrastructure.dto.ApuestaRequestDto;
-import com.crduels.infrastructure.dto.ApuestaResponseDto;
+import com.crduels.infrastructure.dto.rq.ApuestaRequest;
+import com.crduels.infrastructure.dto.rs.ApuestaResponse;
 import com.crduels.application.service.ApuestaService;
 import com.crduels.domain.entity.EstadoApuesta;
 import org.springframework.http.HttpStatus;
@@ -26,23 +26,23 @@ public class ApuestaController {
 
     @PostMapping
     @Operation(summary = "Crear apuesta", description = "Registra una nueva apuesta")
-    public ResponseEntity<ApuestaResponseDto> crear(@RequestBody ApuestaRequestDto dto) {
-        ApuestaResponseDto response = apuestaService.crearApuesta(dto);
+    public ResponseEntity<ApuestaResponse> crear(@RequestBody ApuestaRequest dto) {
+        ApuestaResponse response = apuestaService.crearApuesta(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/pendientes")
     @Operation(summary = "Listar pendientes", description = "Obtiene apuestas pendientes por modo de juego")
-    public ResponseEntity<List<ApuestaResponseDto>> listarPendientes(@RequestParam("modo") String modo) {
-        List<ApuestaResponseDto> lista = apuestaService.listarPendientesPorModo(modo);
+    public ResponseEntity<List<ApuestaResponse>> listarPendientes(@RequestParam("modo") String modo) {
+        List<ApuestaResponse> lista = apuestaService.listarPendientesPorModo(modo);
         return ResponseEntity.ok(lista);
     }
 
     @PutMapping("/{id}/estado")
     @Operation(summary = "Cambiar estado", description = "Actualiza el estado de una apuesta")
-    public ResponseEntity<ApuestaResponseDto> cambiarEstado(@PathVariable UUID id,
-                                                            @RequestParam("estado") EstadoApuesta estado) {
-        ApuestaResponseDto response = apuestaService.cambiarEstado(id, estado);
+    public ResponseEntity<ApuestaResponse> cambiarEstado(@PathVariable UUID id,
+                                                         @RequestParam("estado") EstadoApuesta estado) {
+        ApuestaResponse response = apuestaService.cambiarEstado(id, estado);
         return ResponseEntity.ok(response);
     }
 }

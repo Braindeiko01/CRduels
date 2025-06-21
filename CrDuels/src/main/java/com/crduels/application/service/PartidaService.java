@@ -1,13 +1,14 @@
 package com.crduels.application.service;
 
-import com.crduels.infrastructure.dto.PartidaRequestDto;
-import com.crduels.infrastructure.dto.PartidaResponseDto;
-import com.crduels.infrastructure.mapper.PartidaMapper;
 import com.crduels.domain.entity.*;
+import com.crduels.infrastructure.dto.rq.PartidaRequest;
+import com.crduels.infrastructure.dto.rs.PartidaResponse;
+import com.crduels.infrastructure.mapper.PartidaMapper;
 import com.crduels.infrastructure.repository.ApuestaRepository;
 import com.crduels.infrastructure.repository.PartidaRepository;
 import com.crduels.infrastructure.repository.TransaccionRepository;
 import com.crduels.infrastructure.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class PartidaService {
 
     private final PartidaRepository partidaRepository;
@@ -23,30 +25,18 @@ public class PartidaService {
     private final UsuarioRepository usuarioRepository;
     private final TransaccionRepository transaccionRepository;
 
-    public PartidaService(PartidaRepository partidaRepository,
-                          PartidaMapper partidaMapper,
-                          ApuestaRepository apuestaRepository,
-                          UsuarioRepository usuarioRepository,
-                          TransaccionRepository transaccionRepository) {
-        this.partidaRepository = partidaRepository;
-        this.partidaMapper = partidaMapper;
-        this.apuestaRepository = apuestaRepository;
-        this.usuarioRepository = usuarioRepository;
-        this.transaccionRepository = transaccionRepository;
-    }
-
-    public PartidaResponseDto registrarPartida(PartidaRequestDto dto) {
+    public PartidaResponse registrarPartida(PartidaRequest dto) {
         Partida partida = partidaMapper.toEntity(dto);
         partida.setValidada(false);
         Partida saved = partidaRepository.save(partida);
         return partidaMapper.toDto(saved);
     }
 
-    public Optional<PartidaResponseDto> obtenerPorApuestaId(UUID apuestaId) {
+    public Optional<PartidaResponse> obtenerPorApuestaId(UUID apuestaId) {
         return partidaRepository.findByApuesta_Id(apuestaId).map(partidaMapper::toDto);
     }
 
-    public PartidaResponseDto marcarComoValidada(UUID partidaId) {
+    public PartidaResponse marcarComoValidada(UUID partidaId) {
         Partida partida = partidaRepository.findById(partidaId)
                 .orElseThrow(() -> new IllegalArgumentException("Partida no encontrada"));
         partida.setValidada(true);

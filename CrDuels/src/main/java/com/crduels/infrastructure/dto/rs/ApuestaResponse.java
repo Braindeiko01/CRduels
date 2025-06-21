@@ -1,4 +1,4 @@
-package com.crduels.infrastructure.dto;
+package com.crduels.infrastructure.dto.rs;
 
 import com.crduels.domain.entity.EstadoApuesta;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ApuestaResponseDto {
+public class ApuestaResponse {
     private UUID id;
     private BigDecimal monto;
     private String modoJuego;

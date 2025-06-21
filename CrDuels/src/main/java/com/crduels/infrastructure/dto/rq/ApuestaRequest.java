@@ -1,4 +1,4 @@
-package com.crduels.infrastructure.dto;
+package com.crduels.infrastructure.dto.rq;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ApuestaRequestDto {
+public class ApuestaRequest {
     private String jugador1Id;
     private String jugador2Id;
     private BigDecimal monto;

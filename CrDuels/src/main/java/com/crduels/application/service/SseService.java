@@ -1,6 +1,7 @@
 package com.crduels.application.service;
 
-import com.crduels.infrastructure.dto.TransaccionResponseDto;
+import com.crduels.infrastructure.dto.rs.TransaccionResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
+@RequiredArgsConstructor
 public class SseService {
 
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
@@ -22,7 +24,7 @@ public class SseService {
         return emitter;
     }
 
-    public void enviarTransaccionAprobada(TransaccionResponseDto dto) {
+    public void enviarTransaccionAprobada(TransaccionResponse dto) {
         List<SseEmitter> muertos = new ArrayList<>();
         for (SseEmitter emitter : emitters) {
             try {

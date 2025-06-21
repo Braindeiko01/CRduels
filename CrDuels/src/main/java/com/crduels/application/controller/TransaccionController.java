@@ -1,7 +1,7 @@
 package com.crduels.application.controller;
 
-import com.crduels.infrastructure.dto.TransaccionRequestDto;
-import com.crduels.infrastructure.dto.TransaccionResponseDto;
+import com.crduels.infrastructure.dto.rq.TransaccionRequest;
+import com.crduels.infrastructure.dto.rs.TransaccionResponse;
 import com.crduels.application.service.TransaccionService;
 import com.crduels.domain.entity.EstadoTransaccion;
 import org.springframework.http.HttpStatus;
@@ -26,30 +26,30 @@ public class TransaccionController {
 
     @PostMapping
     @Operation(summary = "Registrar transacción", description = "Crea una nueva transacción")
-    public ResponseEntity<TransaccionResponseDto> crear(@RequestBody TransaccionRequestDto dto) {
-        TransaccionResponseDto response = transaccionService.registrarTransaccion(dto);
+    public ResponseEntity<TransaccionResponse> crear(@RequestBody TransaccionRequest dto) {
+        TransaccionResponse response = transaccionService.registrarTransaccion(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/usuario/{id}")
     @Operation(summary = "Listar por usuario", description = "Obtiene las transacciones de un usuario")
-    public ResponseEntity<List<TransaccionResponseDto>> listarPorUsuario(@PathVariable("id") String usuarioId) {
-        List<TransaccionResponseDto> lista = transaccionService.listarPorUsuario(usuarioId);
+    public ResponseEntity<List<TransaccionResponse>> listarPorUsuario(@PathVariable("id") String usuarioId) {
+        List<TransaccionResponse> lista = transaccionService.listarPorUsuario(usuarioId);
         return ResponseEntity.ok(lista);
     }
 
     @PostMapping("/{id}/aprobar")
     @Operation(summary = "Aprobar transacción", description = "Aprueba la transacción y actualiza el saldo")
-    public ResponseEntity<TransaccionResponseDto> aprobar(@PathVariable UUID id) {
-        TransaccionResponseDto response = transaccionService.aprobarTransaccion(id);
+    public ResponseEntity<TransaccionResponse> aprobar(@PathVariable UUID id) {
+        TransaccionResponse response = transaccionService.aprobarTransaccion(id);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/estado")
     @Operation(summary = "Cambiar estado", description = "Actualiza el estado de una transacción")
-    public ResponseEntity<TransaccionResponseDto> cambiarEstado(@PathVariable UUID id,
-                                                                @RequestParam("estado") EstadoTransaccion estado) {
-        TransaccionResponseDto response = transaccionService.cambiarEstado(id, estado);
+    public ResponseEntity<TransaccionResponse> cambiarEstado(@PathVariable UUID id,
+                                                             @RequestParam("estado") EstadoTransaccion estado) {
+        TransaccionResponse response = transaccionService.cambiarEstado(id, estado);
         return ResponseEntity.ok(response);
     }
 }

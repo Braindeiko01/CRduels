@@ -1,7 +1,7 @@
 package com.crduels.infrastructure.mapper;
 
-import com.crduels.infrastructure.dto.TransaccionRequestDto;
-import com.crduels.infrastructure.dto.TransaccionResponseDto;
+import com.crduels.infrastructure.dto.rq.TransaccionRequest;
+import com.crduels.infrastructure.dto.rs.TransaccionResponse;
 import com.crduels.domain.entity.Transaccion;
 import com.crduels.domain.entity.Usuario;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TransaccionMapper {
 
-    public Transaccion toEntity(TransaccionRequestDto dto) {
+    public Transaccion toEntity(TransaccionRequest dto) {
         if (dto == null) {
             return null;
         }
@@ -23,11 +23,11 @@ public class TransaccionMapper {
         return builder.build();
     }
 
-    public TransaccionResponseDto toDto(Transaccion entity) {
+    public TransaccionResponse toDto(Transaccion entity) {
         if (entity == null) {
             return null;
         }
-        return TransaccionResponseDto.builder()
+        return TransaccionResponse.builder()
                 .id(entity.getId())
                 .usuarioId(entity.getUsuario() != null ? entity.getUsuario().getId() : null)
                 .monto(entity.getMonto())
