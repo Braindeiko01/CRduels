@@ -8,6 +8,7 @@ import com.crduels.infrastructure.dto.MatchResultDto;
 import com.crduels.infrastructure.dto.rq.ApuestaRequest;
 import com.crduels.infrastructure.dto.rs.ApuestaResponse;
 import com.crduels.infrastructure.repository.SolicitudApuestaRepository;
+import com.crduels.application.service.MatchSseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,8 @@ public class MatchmakingService {
 
     private final SolicitudApuestaRepository solicitudRepository;
     private final ApuestaService apuestaService;
+    private final MatchSseService matchSseService;
+
 
     /**
      * Ejecuta el proceso de matchmaking emparejando solicitudes de apuesta con
@@ -67,6 +70,9 @@ public class MatchmakingService {
                         .monto(apuesta.getMonto())
                         .modoJuego(apuesta.getModoJuego())
                         .build());
+
+                matchSseService.notifyMatch(apuesta.getId(), s1.getJugador(), s2.getJugador());
+
             }
         }
 
