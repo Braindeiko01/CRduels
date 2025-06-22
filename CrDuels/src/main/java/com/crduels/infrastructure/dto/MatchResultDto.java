@@ -19,8 +19,9 @@ public class MatchResultDto implements Serializable {
     @Serial
     private static final long serialVersionUID = -8418829763317647957L;
 
-    private UUID apuesta1Id;
-    private UUID apuesta2Id;
+    private UUID apuestaId;
+    private UUID jugador1Id;
+    private UUID jugador2Id;
     private BigDecimal monto;
     private String modoJuego;
 }
