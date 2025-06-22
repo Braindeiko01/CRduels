@@ -2,9 +2,7 @@ package com.crduels.application.controller;
 
 import com.crduels.application.service.SseService;
 import com.crduels.application.service.MatchSseService;
-import com.crduels.application.service.RealtimeMatchmakingService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +16,6 @@ public class SseController {
 
     private final SseService sseService;
     private final MatchSseService matchSseService;
-    private final RealtimeMatchmakingService realtimeMatchmakingService;
 
     @GetMapping("/transacciones")
     public SseEmitter streamTransacciones() {
@@ -28,10 +25,5 @@ public class SseController {
     @GetMapping("/match")
     public SseEmitter streamMatch(@RequestParam("jugadorId") String jugadorId) {
         return matchSseService.subscribe(jugadorId);
-    }
-
-    @GetMapping("/matchmaking/{usuarioId}")
-    public SseEmitter streamMatchmaking(@PathVariable String usuarioId) {
-        return realtimeMatchmakingService.subscribe(usuarioId);
     }
 }
