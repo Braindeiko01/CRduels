@@ -26,6 +26,7 @@ public class MatchmakingService {
     private final ApuestaService apuestaService;
     private final MatchSseService matchSseService;
 
+
     /**
      * Ejecuta el proceso de matchmaking emparejando solicitudes de apuesta con
      * el mismo monto y modo de juego. Por cada par de solicitudes se crea una
@@ -71,6 +72,7 @@ public class MatchmakingService {
                         .build());
 
                 matchSseService.notifyMatch(apuesta.getId(), s1.getJugador(), s2.getJugador());
+
             }
         }
 
