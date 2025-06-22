@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/sse")
+@RequestMapping("/sse")
 @RequiredArgsConstructor
 public class SseController {
 
