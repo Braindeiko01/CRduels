@@ -1,7 +1,7 @@
 package com.crduels.infrastructure.repository;
 
 import com.crduels.domain.entity.SolicitudApuesta;
-import com.crduels.domain.entity.EstadoSolicitud;
+import com.crduels.domain.entity.EstadoSolicitudApuesta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +14,5 @@ public interface SolicitudApuestaRepository extends JpaRepository<SolicitudApues
     /**
      * Obtiene todas las solicitudes que estén en el estado especificado (ej: PENDIENTE).
      */
-    List<SolicitudApuesta> findByEstado(EstadoSolicitud estado);
+    List<SolicitudApuesta> findByEstado(EstadoSolicitudApuesta estado);
 }

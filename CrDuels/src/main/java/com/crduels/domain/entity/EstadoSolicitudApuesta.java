@@ -1,6 +1,6 @@
 package com.crduels.domain.entity;
 
-public enum EstadoSolicitud {
+public enum EstadoSolicitudApuesta {
     PENDIENTE,
     EMPAREJADA,
     CANCELADA

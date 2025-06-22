@@ -37,7 +37,7 @@ public class SolicitudApuesta {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EstadoSolicitud estado;
+    private EstadoSolicitudApuesta estado;
 
     @Column(name = "creado_en", nullable = false)
     private LocalDateTime creadoEn;

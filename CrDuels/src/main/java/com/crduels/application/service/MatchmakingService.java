@@ -2,9 +2,9 @@ package com.crduels.application.service;
 
 import com.crduels.domain.entity.Apuesta;
 import com.crduels.domain.entity.EstadoApuesta;
-import com.crduels.domain.entity.EstadoSolicitud;
+import com.crduels.domain.entity.EstadoSolicitudApuesta;
 import com.crduels.domain.entity.SolicitudApuesta;
-import com.crduels.infrastructure.dto.MatchResultDto;
+import com.crduels.infrastructure.dto.rs.MatchResultDto;
 import com.crduels.infrastructure.dto.rq.ApuestaRequest;
 import com.crduels.infrastructure.dto.rs.ApuestaResponse;
 import com.crduels.infrastructure.repository.SolicitudApuestaRepository;
@@ -39,7 +39,7 @@ public class MatchmakingService {
      */
     @Transactional
     public List<MatchResultDto> ejecutarMatchmaking() {
-        List<SolicitudApuesta> pendientes = solicitudRepository.findByEstado(EstadoSolicitud.PENDIENTE);
+        List<SolicitudApuesta> pendientes = solicitudRepository.findByEstado(EstadoSolicitudApuesta.PENDIENTE);
 
         // Agrupar por monto y modo de juego
         Map<Key, List<SolicitudApuesta>> grupos = pendientes.stream()
@@ -63,8 +63,8 @@ public class MatchmakingService {
                 ApuestaResponse apuesta = apuestaService.crearApuesta(rq);
                 apuestaService.cambiarEstado(apuesta.getId(), EstadoApuesta.EMPAREJADA);
 
-                s1.setEstado(EstadoSolicitud.EMPAREJADA);
-                s2.setEstado(EstadoSolicitud.EMPAREJADA);
+                s1.setEstado(EstadoSolicitudApuesta.EMPAREJADA);
+                s2.setEstado(EstadoSolicitudApuesta.EMPAREJADA);
                 solicitudRepository.saveAll(Arrays.asList(s1, s2));
 
                 resultados.add(MatchResultDto.builder()

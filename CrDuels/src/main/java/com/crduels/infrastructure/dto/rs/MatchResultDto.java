@@ -1,4 +1,4 @@
-package com.crduels.infrastructure.dto;
+package com.crduels.infrastructure.dto.rs;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
