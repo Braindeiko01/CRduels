@@ -3,6 +3,7 @@ package com.crduels.application.controller;
 import com.crduels.application.service.SseService;
 import com.crduels.application.service.MatchSseService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +18,9 @@ public class SseController {
     private final SseService sseService;
     private final MatchSseService matchSseService;
 
-    @GetMapping("/transacciones")
-    public SseEmitter streamTransacciones() {
-        return sseService.subscribe();
+    @GetMapping("/transacciones/{usuarioId}")
+    public SseEmitter streamTransacciones(@PathVariable String usuarioId) {
+        return sseService.subscribe(usuarioId);
     }
 
     @GetMapping("/match")

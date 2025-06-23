@@ -1,6 +1,9 @@
 package com.crduels.application.service;
 
 import com.crduels.domain.entity.*;
+import com.crduels.domain.entity.TipoTransaccion;
+import com.crduels.domain.entity.EstadoTransaccion;
+
 import com.crduels.infrastructure.dto.rq.PartidaRequest;
 import com.crduels.infrastructure.dto.rs.PartidaResponse;
 import com.crduels.infrastructure.mapper.PartidaMapper;

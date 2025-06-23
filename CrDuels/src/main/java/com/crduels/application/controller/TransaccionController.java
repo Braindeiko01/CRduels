@@ -1,5 +1,6 @@
 package com.crduels.application.controller;
 
+import com.crduels.application.service.SseService;
 import com.crduels.application.service.TransaccionService;
 import com.crduels.infrastructure.dto.rq.TransaccionRequest;
 import com.crduels.infrastructure.dto.rs.TransaccionResponse;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +27,7 @@ import java.util.UUID;
 public class TransaccionController {
 
     private final TransaccionService transaccionService;
+    private final SseService sseService;
 
     @PostMapping
     @Operation(summary = "Registrar transacción", description = "Crea una nueva transacción")
@@ -40,11 +43,17 @@ public class TransaccionController {
         return ResponseEntity.ok(lista);
     }
 
+    @GetMapping("/stream/{usuarioId}")
+    public SseEmitter stream(@PathVariable String usuarioId) {
+        return sseService.subscribe(usuarioId); // <- usando tu SseService refactorizado
+    }
+
     @PostMapping("/{id}/aprobar")
     @Operation(summary = "Aprobar transacción", description = "Aprueba la transacción y actualiza el saldo")
     public ResponseEntity<TransaccionResponse> aprobar(@PathVariable UUID id) {
         TransaccionResponse response = transaccionService.aprobarTransaccion(id);
         return ResponseEntity.ok(response);
+
     }
 
 }
