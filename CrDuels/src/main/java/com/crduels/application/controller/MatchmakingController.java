@@ -2,6 +2,7 @@ package com.crduels.application.controller;
 
 import com.crduels.application.service.MatchmakingService;
 import com.crduels.infrastructure.dto.rq.SolicitudDueloRequest;
+import com.crduels.infrastructure.dto.rq.CancelarMatchmakingRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,19 +24,25 @@ public class MatchmakingController {
     public ResponseEntity<?> ejecutarMatchmaking(@RequestBody SolicitudDueloRequest request) {
         return matchmakingService.intentarEmparejar(request.getUsuarioId(), request.getModoJuego())
                 .map(partida -> {
-                    Map<String, Object> match = new HashMap<>();
-                    match.put("matchEncontrado", true);
-                    match.put("matchId", partida.getId());
-                    match.put("chatId", partida.getChatId());
-                    match.put("jugador1", partida.getJugador1Id());
-                    match.put("jugador2", partida.getJugador2Id());
-                    return ResponseEntity.ok(match);
+                    Map<String, Object> partidaMap = new HashMap<>();
+                    partidaMap.put("id", partida.getId());
+                    Map<String, Object> resp = new HashMap<>();
+                    resp.put("match", true);
+                    resp.put("partida", partidaMap);
+                    return ResponseEntity.ok(resp);
                 })
                 .orElseGet(() -> {
-                    Map<String, Object> sinMatch = new HashMap<>();
-                    sinMatch.put("matchEncontrado", false);
-                    sinMatch.put("mensaje", "Esperando oponente...");
-                    return ResponseEntity.ok(sinMatch);
+                    Map<String, Object> resp = new HashMap<>();
+                    resp.put("status", "esperando");
+                    return ResponseEntity.ok(resp);
                 });
+    }
+
+    @PostMapping("/cancelar")
+    public ResponseEntity<?> cancelarMatchmaking(@RequestBody CancelarMatchmakingRequest request) {
+        matchmakingService.cancelarSolicitud(request.getUsuarioId());
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("status", "cancelado");
+        return ResponseEntity.ok(resp);
     }
 }
