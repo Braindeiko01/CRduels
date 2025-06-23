@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -26,4 +27,5 @@ public class ApuestaRequest implements Serializable {
 
     private BigDecimal monto;
     private String modoJuego;
+    private UUID partidaId;
 }

@@ -1,12 +1,14 @@
 package com.crduels.application.service;
-
+import com.crduels.infrastructure.dto.rq.ApuestaRequest;
 import com.crduels.domain.entity.DueloRequest;
 import com.crduels.domain.entity.Partida;
 import com.crduels.infrastructure.repository.DueloRequestRepository;
 import com.crduels.infrastructure.repository.PartidaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +21,7 @@ public class MatchmakingService {
     private final DueloRequestRepository dueloRequestRepository;
     private final PartidaRepository partidaRepository;
     private final ChatService chatService;
+    private final ApuestaService apuestaService;
 
     public DueloRequest registrarSolicitudDuelo(String usuarioId, String modoJuego) {
         DueloRequest solicitud = DueloRequest.builder()
@@ -32,13 +35,13 @@ public class MatchmakingService {
         return dueloRequestRepository.save(solicitud);
     }
 
+    @Transactional
     public Optional<Partida> intentarEmparejar(String usuarioId, String modoJuego) {
         List<DueloRequest> pendientes = dueloRequestRepository
                 .findByModoJuegoAndEstado(modoJuego, "PENDIENTE");
 
         for (DueloRequest otro : pendientes) {
             if (!otro.getUsuarioId().equals(usuarioId)) {
-                // Actualizar solicitudes
                 otro.setEstado("EMPAREJADO");
                 dueloRequestRepository.save(otro);
 
@@ -60,8 +63,19 @@ public class MatchmakingService {
 
     private Partida crearPartida(String jugador1Id, String jugador2Id, String modoJuego) {
         UUID partidaId = UUID.randomUUID();
-
         UUID chatId = chatService.crearChatParaPartida(partidaId, jugador1Id, jugador2Id);
+
+        // Crear apuestas asociadas a la partida para ambos jugadores
+        ApuestaRequest apuestaRequest = ApuestaRequest.builder()
+                .jugador1Id(jugador1Id)
+                .jugador2Id(jugador2Id)
+                .partidaId(partidaId)
+                .monto(new BigDecimal("6000")) // o lo que sea dinámico
+                .modoJuego(modoJuego)
+                .build();
+
+        apuestaService.crearApuesta(apuestaRequest);
+
 
         Partida partida = Partida.builder()
                 .id(partidaId)
