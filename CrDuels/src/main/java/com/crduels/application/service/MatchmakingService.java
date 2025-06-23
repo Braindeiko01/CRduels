@@ -22,6 +22,7 @@ public class MatchmakingService {
     private final PartidaRepository partidaRepository;
     private final ChatService chatService;
     private final ApuestaService apuestaService;
+    private final MatchSseService matchSseService;
 
     public DueloRequest registrarSolicitudDuelo(String usuarioId, String modoJuego) {
         DueloRequest solicitud = DueloRequest.builder()
@@ -53,12 +54,19 @@ public class MatchmakingService {
                     actual.setEstado("EMPAREJADO");
                     dueloRequestRepository.save(actual);
 
-                    return Optional.of(crearPartida(actual.getUsuarioId(), otro.getUsuarioId(), modoJuego));
+                    Partida partida = crearPartida(actual.getUsuarioId(), otro.getUsuarioId(), modoJuego);
+                    matchSseService.notifyMatch(partida);
+                    return Optional.of(partida);
                 }
             }
         }
 
         return Optional.empty();
+    }
+
+    public void cancelarSolicitud(String usuarioId) {
+        dueloRequestRepository.findByUsuarioIdAndEstado(usuarioId, "PENDIENTE")
+                .ifPresent(dueloRequestRepository::delete);
     }
 
     private Partida crearPartida(String jugador1Id, String jugador2Id, String modoJuego) {
