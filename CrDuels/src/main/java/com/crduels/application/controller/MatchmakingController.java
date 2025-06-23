@@ -1,29 +1,41 @@
 package com.crduels.application.controller;
 
-import com.crduels.infrastructure.dto.rs.MatchResultDto;
 import com.crduels.application.service.MatchmakingService;
+import com.crduels.infrastructure.dto.rq.SolicitudDueloRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import lombok.RequiredArgsConstructor;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/matchmaking")
-@Tag(name = "Matchmaking", description = "Proceso de emparejamiento")
 @RequiredArgsConstructor
 public class MatchmakingController {
 
     private final MatchmakingService matchmakingService;
 
     @PostMapping("/ejecutar")
-    @Operation(summary = "Ejecutar", description = "Ejecuta el proceso de matchmaking")
-    public ResponseEntity<List<MatchResultDto>> ejecutar() {
-        List<MatchResultDto> resultados = matchmakingService.ejecutarMatchmaking();
-        return ResponseEntity.ok(resultados);
+    public ResponseEntity<?> ejecutarMatchmaking(@RequestBody SolicitudDueloRequest request) {
+        return matchmakingService.intentarEmparejar(request.getUsuarioId(), request.getModoJuego())
+                .map(partida -> {
+                    Map<String, Object> match = new HashMap<>();
+                    match.put("matchEncontrado", true);
+                    match.put("matchId", partida.getId());
+                    match.put("chatId", partida.getChatId());
+                    match.put("jugador1", partida.getJugador1Id());
+                    match.put("jugador2", partida.getJugador2Id());
+                    return ResponseEntity.ok(match);
+                })
+                .orElseGet(() -> {
+                    Map<String, Object> sinMatch = new HashMap<>();
+                    sinMatch.put("matchEncontrado", false);
+                    sinMatch.put("mensaje", "Esperando oponente...");
+                    return ResponseEntity.ok(sinMatch);
+                });
     }
 }
