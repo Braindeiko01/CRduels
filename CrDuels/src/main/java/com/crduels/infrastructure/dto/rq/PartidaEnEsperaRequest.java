@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 public class PartidaEnEsperaRequest {
@@ -14,8 +13,7 @@ public class PartidaEnEsperaRequest {
     private String jugadorId;
 
     @NotEmpty
-    //private List<ModoJuego> modosJuego;//todo: volver a lista
-    private ModoJuego modosJuego;
+    private ModoJuego modoJuego;
 
     @NotNull
     private BigDecimal monto;

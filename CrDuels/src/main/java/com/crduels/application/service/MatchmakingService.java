@@ -54,7 +54,7 @@ public class MatchmakingService {
         PartidaEnEspera partidaEnEsperaRq = PartidaEnEsperaMapper.toEntity(request);
         PartidaEnEspera partidaEnEspera = partidaEnEsperaRepository.save(partidaEnEsperaRq);
 
-        return partidaEnEsperaRepository.findByModoJuegoAndMonto(partidaEnEspera.getModosJuego().get(0), request.getMonto())
+        return partidaEnEsperaRepository.findByModoJuegoAndMonto(partidaEnEspera.getModoJuego(), request.getMonto())
                 .stream()
                 .filter(p -> !p.getJugador().getId().equals(partidaEnEspera.getJugador().getId()))
                 .findFirst() //todo: aquí debería estar la lógica para emparejar el matchmaking con personas del mismo nivel
@@ -90,13 +90,12 @@ public class MatchmakingService {
 
     private Partida crearPartida(PartidaEnEspera partidaEnEspera, PartidaEnEspera partidaEncontrada) {
         Apuesta apuesta = apuestaService.crearApuesta(new ApuestaRequest(partidaEnEspera.getMonto()));
-        ModoJuego modoJuego = obtenerModoJuegoCoincidente(partidaEnEspera, partidaEncontrada);
         UUID chatId = chatService.crearChatParaPartida(partidaEnEspera.getJugador().getId(), partidaEncontrada.getJugador().getId());
 
         Partida partida = Partida.builder()
                 .jugador1(partidaEnEspera.getJugador())
                 .jugador2(partidaEncontrada.getJugador())
-                .modoJuego(modoJuego)
+                .modoJuego(partidaEnEspera.getModoJuego())
                 .estado(com.crduels.domain.entity.partida.EstadoPartida.EN_CURSO)
                 .creada(LocalDateTime.now())
                 .validada(false)
@@ -118,13 +117,4 @@ public class MatchmakingService {
         transaccionService.aprobarTransaccion(response.getId());
     }
 
-
-    public ModoJuego obtenerModoJuegoCoincidente(PartidaEnEspera partidaEncontrada,
-                                                 PartidaEnEspera partidaSolicitada) {
-        return PRIORIDAD_MODO_JUEGO.stream()
-                .filter(partidaEncontrada.getModosJuego()::contains)
-                .filter(partidaSolicitada.getModosJuego()::contains)
-                .findFirst()
-                .orElseGet(() -> PRIORIDAD_MODO_JUEGO.get(0));
-    }
 }

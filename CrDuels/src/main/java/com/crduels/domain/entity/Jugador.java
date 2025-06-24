@@ -37,11 +37,11 @@ public class Jugador {
     @Column(name = "link_amistad")
     private String linkAmistad;
 
-    @Column(columnDefinition = "NUMERIC(38,2) DEFAULT 0.00")
-    private BigDecimal saldo;
+    @Builder.Default
+    private BigDecimal saldo = BigDecimal.ZERO;
 
-    @Column(columnDefinition = "INTEGER DEFAULT 100")
-    private Integer reputacion;
+    @Builder.Default
+    private Integer reputacion = 100;
 
     public Jugador(String id) {
         this.id = id;

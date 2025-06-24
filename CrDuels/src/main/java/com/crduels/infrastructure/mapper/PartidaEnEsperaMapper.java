@@ -14,14 +14,9 @@ public final class PartidaEnEsperaMapper {
     }
 
     public static PartidaEnEspera toEntity(PartidaEnEsperaRequest request) {
-        List<ModoJuego> todo = new ArrayList<>(); //todo: volver a lista
-        todo.add(request.getModosJuego()); //todo: volver a lista
-
-
         return PartidaEnEspera.builder()
                 .jugador(new Jugador(request.getJugadorId()))
-//                .modosJuego(request.getModosJuego()) //todo: volver a lista
-                .modosJuego(todo)
+                .modoJuego(request.getModoJuego())
                 .monto(request.getMonto())
                 .build();
     }
