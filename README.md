@@ -50,6 +50,14 @@ You can include the full Clash Royale friend link, including any `token` or othe
 curl http://localhost:8080/api/usuarios/<googleId>
 ```
 
+* Listen for matchmaking events via SSE
+
+```bash
+curl http://localhost:8080/sse/match?jugadorId=<id>
+```
+
+The same stream is also available at `/sse/matchmaking/<id>` using a path parameter.
+
 ### API documentation
 
 When the server is running you can explore the REST contracts using Swagger UI at:
