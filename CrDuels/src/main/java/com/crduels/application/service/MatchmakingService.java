@@ -45,7 +45,7 @@ public class MatchmakingService {
         Jugador jugadorEnEspera = jugadorRepository.findById(request.getJugadorId())
                 .orElseThrow(() -> new IllegalArgumentException("Jugador no encontrado"));
 
-        if (jugadorEnEspera.getSaldo().compareTo(request.getMonto()) >= 0 0) {
+        if (jugadorEnEspera.getSaldo().compareTo(request.getMonto()) >= 0) {
             throw new IllegalArgumentException("Saldo insuficiente para realizar esta operación");
         }
 
