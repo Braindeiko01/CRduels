@@ -1,16 +1,16 @@
 package com.crduels.application.service;
 
-import com.crduels.domain.entity.*;
-import com.crduels.domain.entity.TipoTransaccion;
+import com.crduels.domain.entity.Apuesta;
 import com.crduels.domain.entity.EstadoTransaccion;
-
-import com.crduels.infrastructure.dto.rq.PartidaRequest;
+import com.crduels.domain.entity.TipoTransaccion;
+import com.crduels.domain.entity.Transaccion;
+import com.crduels.domain.entity.partida.Partida;
 import com.crduels.infrastructure.dto.rs.PartidaResponse;
 import com.crduels.infrastructure.mapper.PartidaMapper;
 import com.crduels.infrastructure.repository.ApuestaRepository;
+import com.crduels.infrastructure.repository.JugadorRepository;
 import com.crduels.infrastructure.repository.PartidaRepository;
 import com.crduels.infrastructure.repository.TransaccionRepository;
-import com.crduels.infrastructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,15 +26,8 @@ public class PartidaService {
     private final PartidaRepository partidaRepository;
     private final PartidaMapper partidaMapper;
     private final ApuestaRepository apuestaRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final JugadorRepository jugadorRepository;
     private final TransaccionRepository transaccionRepository;
-
-    public PartidaResponse registrarPartida(PartidaRequest dto) {
-        Partida partida = partidaMapper.toEntity(dto);
-        partida.setValidada(false);
-        Partida saved = partidaRepository.save(partida);
-        return partidaMapper.toDto(saved);
-    }
 
     public Optional<PartidaResponse> obtenerPorApuestaId(UUID apuestaId) {
         return partidaRepository.findByApuesta_Id(apuestaId).map(partidaMapper::toDto);
@@ -51,16 +44,16 @@ public class PartidaService {
                     .orElseThrow(() -> new IllegalArgumentException("Apuesta no encontrada"));
 
             Transaccion premio = new Transaccion();
-            premio.setUsuario(partida.getGanador());
+            premio.setJugador(partida.getGanador());
             premio.setMonto(apuesta.getMonto().multiply(java.math.BigDecimal.valueOf(2)));
             premio.setTipo(TipoTransaccion.PREMIO);
             premio.setEstado(EstadoTransaccion.APROBADA);
             premio.setCreadoEn(LocalDateTime.now());
             transaccionRepository.save(premio);
 
-            usuarioRepository.findById(partida.getGanador().getId()).ifPresent(u -> {
+            jugadorRepository.findById(partida.getGanador().getId()).ifPresent(u -> {
                 u.setSaldo(u.getSaldo().add(premio.getMonto()));
-                usuarioRepository.save(u);
+                jugadorRepository.save(u);
             });
         }
 

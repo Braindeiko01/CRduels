@@ -22,7 +22,7 @@ public class TransaccionResponse implements Serializable {
     private static final long serialVersionUID = -1358964053489023581L;
 
     private UUID id;
-    private String usuarioId;
+    private String jugadorId;
     private BigDecimal monto;
     private TipoTransaccion tipo;
     private EstadoTransaccion estado;

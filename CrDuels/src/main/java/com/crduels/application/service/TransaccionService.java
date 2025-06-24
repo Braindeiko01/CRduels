@@ -1,14 +1,14 @@
 package com.crduels.application.service;
 
+import com.crduels.application.events.TransaccionAprobadaEvent;
 import com.crduels.domain.entity.EstadoTransaccion;
+import com.crduels.domain.entity.Jugador;
 import com.crduels.domain.entity.Transaccion;
-import com.crduels.domain.entity.Usuario;
 import com.crduels.infrastructure.dto.rq.TransaccionRequest;
 import com.crduels.infrastructure.dto.rs.TransaccionResponse;
 import com.crduels.infrastructure.mapper.TransaccionMapper;
+import com.crduels.infrastructure.repository.JugadorRepository;
 import com.crduels.infrastructure.repository.TransaccionRepository;
-import com.crduels.infrastructure.repository.UsuarioRepository;
-import com.crduels.application.events.TransaccionAprobadaEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class TransaccionService {
 
     private final TransaccionRepository transaccionRepository;
     private final TransaccionMapper transaccionMapper;
-    private final UsuarioRepository usuarioRepository;
+    private final JugadorRepository jugadorRepository;
     private final ApplicationEventPublisher eventPublisher;
 
     public TransaccionResponse registrarTransaccion(TransaccionRequest dto) {
@@ -35,8 +35,8 @@ public class TransaccionService {
         return transaccionMapper.toDto(saved);
     }
 
-    public List<TransaccionResponse> listarPorUsuario(String usuarioId) {
-        return transaccionRepository.findByUsuario_Id(usuarioId).stream()
+    public List<TransaccionResponse> listarPorJugador(String jugadorId) {
+        return transaccionRepository.findByJugador_Id(jugadorId).stream()
                 .map(transaccionMapper::toDto)
                 .toList();
     }
@@ -50,7 +50,7 @@ public class TransaccionService {
             throw new IllegalArgumentException("La transaccion ya ha sido aprobada con anterioridad");
         }
 
-        modificarSaldoUsuario(transaccion);
+        modificarSaldoJugador(transaccion);
 
         transaccion.setEstado(EstadoTransaccion.APROBADA);
         Transaccion saved = transaccionRepository.save(transaccion);
@@ -60,20 +60,20 @@ public class TransaccionService {
         return dto;
     }
 
-    private void modificarSaldoUsuario(Transaccion transaccion) {
-        Usuario usuario = usuarioRepository.findById(transaccion.getUsuario().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+    private void modificarSaldoJugador(Transaccion transaccion) {
+        Jugador jugador = jugadorRepository.findById(transaccion.getJugador().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Jugador no encontrado"));
 
         switch (transaccion.getTipo()) {
-            case DEPOSITO, PREMIO -> usuario.setSaldo(usuario.getSaldo().add(transaccion.getMonto()));
+            case DEPOSITO, PREMIO -> jugador.setSaldo(jugador.getSaldo().add(transaccion.getMonto()));
             case RETIRO, APUESTA -> {
-                if (usuario.getSaldo().compareTo(transaccion.getMonto()) < 0) {
+                if (jugador.getSaldo().compareTo(transaccion.getMonto()) < 0) {
                     throw new IllegalArgumentException("Saldo insuficiente para realizar la transacción");
                 }
-                usuario.setSaldo(usuario.getSaldo().subtract(transaccion.getMonto()));
+                jugador.setSaldo(jugador.getSaldo().subtract(transaccion.getMonto()));
             }
         }
 
-        usuarioRepository.save(usuario);
+        jugadorRepository.save(jugador);
     }
 }

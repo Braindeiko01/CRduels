@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -21,7 +21,7 @@ public class ApuestaResponse implements Serializable {
 
     private UUID id;
     private BigDecimal monto;
-    private String modoJuego;
+    private BigDecimal premio;
     private EstadoApuesta estado;
-    private LocalDateTime creadoEn;
+
 }

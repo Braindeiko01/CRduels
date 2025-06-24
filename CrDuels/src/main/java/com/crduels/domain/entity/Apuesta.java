@@ -1,7 +1,17 @@
 package com.crduels.domain.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,27 +31,18 @@ import java.util.UUID;
 public class Apuesta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
-    @org.hibernate.annotations.GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "jugador1_id", nullable = false)
-    private Usuario jugador1;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "jugador2_id", nullable = false)
-    private Usuario jugador2;
 
     @Column(nullable = false)
     private BigDecimal monto;
 
-    @Column(name = "modo_juego", nullable = false)
-    private String modoJuego;
+    @Column(nullable = false)
+    private BigDecimal comision;
+
+    @Column(nullable = false)
+    private BigDecimal premio;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -49,4 +50,8 @@ public class Apuesta {
 
     @Column(name = "creado_en", nullable = false)
     private LocalDateTime creadoEn;
+
+    public Apuesta(UUID id) {
+        this.id = id;
+    }
 }

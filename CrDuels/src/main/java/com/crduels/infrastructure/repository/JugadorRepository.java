@@ -1,14 +1,14 @@
 package com.crduels.infrastructure.repository;
 
-import com.crduels.domain.entity.Usuario;
+import com.crduels.domain.entity.Jugador;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, String> {
+public interface JugadorRepository extends JpaRepository<Jugador, String> {
     boolean existsByEmail(String email);
 
     boolean existsByTelefono(String telefono);
 
-    Optional<Usuario> findByTelefono(String telefono);
+    Optional<Jugador> findByTelefono(String telefono);
 }

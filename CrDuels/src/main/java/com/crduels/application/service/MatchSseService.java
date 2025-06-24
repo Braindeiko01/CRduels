@@ -1,16 +1,16 @@
 package com.crduels.application.service;
 
-import com.crduels.domain.entity.Usuario;
-import com.crduels.domain.entity.Partida;
+import com.crduels.domain.entity.Jugador;
+import com.crduels.domain.entity.partida.Partida;
 import com.crduels.infrastructure.dto.rs.MatchSseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.HashMap;
 
 @Service
 public class MatchSseService {
@@ -26,17 +26,17 @@ public class MatchSseService {
         return emitter;
     }
 
-    public void notifyMatch(UUID apuestaId, Usuario jugador1, Usuario jugador2) {
+    public void notifyMatch(UUID apuestaId, Jugador jugador1, Jugador jugador2) {
         sendEvent(jugador1.getId(), apuestaId, jugador2);
         sendEvent(jugador2.getId(), apuestaId, jugador1);
     }
 
     public void notifyMatch(Partida partida) {
-        sendMatch(partida.getJugador1Id(), partida);
-        sendMatch(partida.getJugador2Id(), partida);
+        sendMatch(partida.getJugador1().getId(), partida);
+        sendMatch(partida.getJugador2().getId(), partida);
     }
 
-    private void sendEvent(String receptorId, UUID apuestaId, Usuario oponente) {
+    private void sendEvent(String receptorId, UUID apuestaId, Jugador oponente) {
         SseEmitter emitter = emitters.get(receptorId);
         if (emitter == null) {
             return;

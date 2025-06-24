@@ -13,6 +13,6 @@ public class TransaccionAprobadaEventListener {
 
     @EventListener
     public void handleTransaccionAprobada(TransaccionAprobadaEvent event) {
-        sseService.notificarTransaccionAprobada(event.getTransaccion());
+        sseService.notificarTransaccionAprobada(event.transaccion());
     }
 }

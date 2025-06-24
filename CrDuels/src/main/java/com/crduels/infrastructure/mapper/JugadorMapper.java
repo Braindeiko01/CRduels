@@ -1,40 +1,40 @@
 package com.crduels.infrastructure.mapper;
 
-import com.crduels.infrastructure.dto.rq.UsuarioRequest;
-import com.crduels.domain.entity.Usuario;
-import com.crduels.infrastructure.dto.rs.UsuarioResponse;
+import com.crduels.domain.entity.Jugador;
+import com.crduels.infrastructure.dto.rq.JugadorRequest;
+import com.crduels.infrastructure.dto.rs.JugadorResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class UsuarioMapper {
+public class JugadorMapper {
 
     private static final Pattern TAG_PATTERN = Pattern.compile("tag=([^&]+)");
 
-    public UsuarioResponse toDto(Usuario usuario) {
-        if (usuario == null) {
+    public JugadorResponse toDto(Jugador jugador) {
+        if (jugador == null) {
             return null;
         }
-        return UsuarioResponse.builder()
-                .id(usuario.getId())
-                .nombre(usuario.getNombre())
-                .email(usuario.getEmail())
-                .telefono(usuario.getTelefono())
-                .tagClash(usuario.getTagClash())
-                .linkAmistad(usuario.getLinkAmistad())
-                .saldo(usuario.getSaldo())
-                .reputacion(usuario.getReputacion())
+        return JugadorResponse.builder()
+                .id(jugador.getId())
+                .nombre(jugador.getNombre())
+                .email(jugador.getEmail())
+                .telefono(jugador.getTelefono())
+                .tagClash(jugador.getTagClash())
+                .linkAmistad(jugador.getLinkAmistad())
+                .saldo(jugador.getSaldo())
+                .reputacion(jugador.getReputacion())
                 .build();
     }
 
-    public Usuario toEntity(UsuarioRequest dto) {
+    public Jugador toEntity(JugadorRequest dto) {
         if (dto == null) {
             return null;
         }
 
-        return Usuario.builder()
+        return Jugador.builder()
                 .id(dto.getId())
                 .nombre(dto.getNombre())
                 .email(dto.getEmail())

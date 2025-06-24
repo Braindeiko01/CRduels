@@ -24,4 +24,5 @@ public class MatchResultDto implements Serializable {
     private UUID jugador2Id;
     private BigDecimal monto;
     private String modoJuego;
+
 }

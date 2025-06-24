@@ -6,6 +6,7 @@ import com.crduels.infrastructure.dto.rq.TransaccionRequest;
 import com.crduels.infrastructure.dto.rs.TransaccionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
@@ -36,16 +36,16 @@ public class TransaccionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/usuario/{id}")
-    @Operation(summary = "Listar por usuario", description = "Obtiene las transacciones de un usuario")
-    public ResponseEntity<List<TransaccionResponse>> listarPorUsuario(@PathVariable("id") String usuarioId) {
-        List<TransaccionResponse> lista = transaccionService.listarPorUsuario(usuarioId);
+    @GetMapping("/jugador/{id}")
+    @Operation(summary = "Listar por jugador", description = "Obtiene las transacciones de un jugador")
+    public ResponseEntity<List<TransaccionResponse>> listarPorJugador(@PathVariable("id") String jugadorId) {
+        List<TransaccionResponse> lista = transaccionService.listarPorJugador(jugadorId);
         return ResponseEntity.ok(lista);
     }
 
-    @GetMapping("/stream/{usuarioId}")
-    public SseEmitter stream(@PathVariable String usuarioId) {
-        return sseService.subscribe(usuarioId); // <- usando tu SseService refactorizado
+    @GetMapping("/stream/{jugadorId}")
+    public SseEmitter stream(@PathVariable String jugadorId) {
+        return sseService.subscribe(jugadorId); // <- usando tu SseService refactorizado
     }
 
     @PostMapping("/{id}/aprobar")

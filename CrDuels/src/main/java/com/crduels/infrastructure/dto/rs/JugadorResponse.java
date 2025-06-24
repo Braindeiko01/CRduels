@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UsuarioResponse implements Serializable {
+public class JugadorResponse implements Serializable {
     @Serial
     private static final long serialVersionUID = -2339427444299457151L;
 

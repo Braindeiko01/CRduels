@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UsuarioRequest implements Serializable {
+public class JugadorRequest implements Serializable {
     @Serial
     private static final long serialVersionUID = -1079360589218994359L;
 

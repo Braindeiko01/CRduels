@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class CancelarMatchmakingRequest {
-    private String usuarioId;
+    private String jugadorId;
 }

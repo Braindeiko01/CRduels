@@ -1,47 +1,47 @@
 package com.crduels.infrastructure.mapper;
 
 import com.crduels.domain.entity.Apuesta;
-import com.crduels.domain.entity.Usuario;
+import com.crduels.domain.entity.EstadoApuesta;
 import com.crduels.infrastructure.dto.rq.ApuestaRequest;
 import com.crduels.infrastructure.dto.rs.ApuestaResponse;
-import org.springframework.stereotype.Component;
 
-@Component
-public class ApuestaMapper {
-    public Apuesta toEntity(ApuestaRequest dto) {
-        if (dto == null) {
-            return null;
-        }
-        Apuesta.ApuestaBuilder builder = Apuesta.builder()
-                .monto(dto.getMonto())
-                .modoJuego(dto.getModoJuego());
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
 
-        if (dto.getJugador1Id() != null) {
-            Usuario jugador1 = Usuario.builder()
-                    .id(dto.getJugador1Id())
-                    .build();
-            builder.jugador1(jugador1);
-        }
-        if (dto.getJugador2Id() != null) {
-            Usuario jugador2 = Usuario.builder()
-                    .id(dto.getJugador2Id())
-                    .build();
-            builder.jugador2(jugador2);
-        }
+public final class ApuestaMapper {
 
-        return builder.build();
+    private ApuestaMapper() {
     }
 
-    public ApuestaResponse toDto(Apuesta entity) {
-        if (entity == null) {
-            return null;
-        }
+    private static final BigDecimal PORCENTAJE_COMISION = BigDecimal.valueOf(20);
+
+    public static Apuesta toEntity(ApuestaRequest dto) {
+        BigDecimal monto = dto.getMonto();
+        BigDecimal bote = monto.multiply(BigDecimal.valueOf(2));
+        BigDecimal comision = calcularComision(monto);
+        BigDecimal premio = bote.subtract(comision);
+
+        return Apuesta.builder()
+                .monto(monto)
+                .comision(comision)
+                .premio(premio)
+                .estado(EstadoApuesta.PENDIENTE)
+                .creadoEn(LocalDateTime.now())
+                .build();
+    }
+
+    private static BigDecimal calcularComision(BigDecimal bote) {
+        return bote.multiply(PORCENTAJE_COMISION)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+    }
+
+    public static ApuestaResponse toDto(Apuesta entity) {
         return ApuestaResponse.builder()
                 .id(entity.getId())
                 .monto(entity.getMonto())
-                .modoJuego(entity.getModoJuego())
+                .premio(entity.getPremio())
                 .estado(entity.getEstado())
-                .creadoEn(entity.getCreadoEn())
                 .build();
     }
 

@@ -14,11 +14,10 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
 
-    public UUID crearChatParaPartida(UUID partidaId, String jugador1Id, String jugador2Id) {
+    public UUID crearChatParaPartida(String jugador1Id, String jugador2Id) {
         Chat chat = Chat.builder()
                 .id(UUID.randomUUID())
-                .partidaId(partidaId)
-                .usuarios(List.of(jugador1Id, jugador2Id))
+                .jugadores(List.of(jugador1Id, jugador2Id))
                 .build();
 
         chatRepository.save(chat);

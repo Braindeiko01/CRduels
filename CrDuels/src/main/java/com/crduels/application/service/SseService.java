@@ -18,21 +18,21 @@ public class SseService {
 
     private final Map<String, List<SseEmitter>> emitters = new ConcurrentHashMap<>();
 
-    public SseEmitter subscribe(String usuarioId) {
+    public SseEmitter subscribe(String jugadorId) {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
 
-        emitter.onCompletion(() -> removeEmitter(usuarioId, emitter));
-        emitter.onTimeout(() -> removeEmitter(usuarioId, emitter));
-        emitter.onError((e) -> removeEmitter(usuarioId, emitter));
+        emitter.onCompletion(() -> removeEmitter(jugadorId, emitter));
+        emitter.onTimeout(() -> removeEmitter(jugadorId, emitter));
+        emitter.onError(e -> removeEmitter(jugadorId, emitter));
 
-        emitters.computeIfAbsent(usuarioId, k -> new CopyOnWriteArrayList<>()).add(emitter);
+        emitters.computeIfAbsent(jugadorId, k -> new CopyOnWriteArrayList<>()).add(emitter);
         return emitter;
     }
 
     public void notificarTransaccionAprobada(TransaccionResponse dto) {
-        String usuarioId = dto.getUsuarioId();
+        String jugadorId = dto.getJugadorId();
 
-        List<SseEmitter> userEmitters = emitters.get(usuarioId);
+        List<SseEmitter> userEmitters = emitters.get(jugadorId);
         if (userEmitters == null) return;
 
         List<SseEmitter> muertos = new ArrayList<>();
@@ -48,8 +48,8 @@ public class SseService {
         userEmitters.removeAll(muertos);
     }
 
-    private void removeEmitter(String usuarioId, SseEmitter emitter) {
-        List<SseEmitter> userEmitters = emitters.get(usuarioId);
+    private void removeEmitter(String jugadorId, SseEmitter emitter) {
+        List<SseEmitter> userEmitters = emitters.get(jugadorId);
         if (userEmitters != null) {
             userEmitters.remove(emitter);
         }

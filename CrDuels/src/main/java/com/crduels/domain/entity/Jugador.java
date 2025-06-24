@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "jugadores")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class Jugador {
 
     @Id
     @Column(name = "id", unique = true)
@@ -37,8 +37,13 @@ public class Usuario {
     @Column(name = "link_amistad")
     private String linkAmistad;
 
-    private BigDecimal saldo = BigDecimal.ZERO;
+    @Column(columnDefinition = "NUMERIC(38,2) DEFAULT 0.00")
+    private BigDecimal saldo;
 
-    private Integer reputacion = 100;
+    @Column(columnDefinition = "INTEGER DEFAULT 100")
+    private Integer reputacion;
 
+    public Jugador(String id) {
+        this.id = id;
+    }
 }

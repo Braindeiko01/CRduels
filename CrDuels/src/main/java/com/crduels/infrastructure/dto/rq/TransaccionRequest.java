@@ -18,7 +18,7 @@ public class TransaccionRequest implements Serializable {
     @Serial
     private static final long serialVersionUID = 298120322987427100L;
 
-    private String usuarioId;
+    private String jugadorId;
     private BigDecimal monto;
     private TipoTransaccion tipo;
 

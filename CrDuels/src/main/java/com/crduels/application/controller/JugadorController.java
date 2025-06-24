@@ -1,8 +1,8 @@
 package com.crduels.application.controller;
 
-import com.crduels.application.service.UsuarioService;
-import com.crduels.infrastructure.dto.rq.UsuarioRequest;
-import com.crduels.infrastructure.dto.rs.UsuarioResponse;
+import com.crduels.application.service.JugadorService;
+import com.crduels.infrastructure.dto.rq.JugadorRequest;
+import com.crduels.infrastructure.dto.rs.JugadorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,24 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/usuarios")
-@Tag(name = "Usuarios", description = "Operaciones de usuarios")
+@RequestMapping("/api/jugadores")
+@Tag(name = "Jugadores", description = "Operaciones de jugadores")
 @RequiredArgsConstructor
-public class UsuarioController {
+public class JugadorController {
 
-    private final UsuarioService usuarioService;
+    private final JugadorService jugadorService;
 
     @PutMapping
-    @Operation(summary = "Registrar usuario", description = "Registra un nuevo usuario")
-    public ResponseEntity<UsuarioResponse> registrar(@Valid @RequestBody UsuarioRequest usuario) {
-        UsuarioResponse nuevo = usuarioService.registrarUsuario(usuario);
+    @Operation(summary = "Registrar jugador", description = "Registra un nuevo jugador")
+    public ResponseEntity<JugadorResponse> registrar(@Valid @RequestBody JugadorRequest jugador) {
+        JugadorResponse nuevo = jugadorService.registrarJugador(jugador);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener usuario", description = "Obtiene un usuario por su identificador")
-    public ResponseEntity<UsuarioResponse> obtener(@PathVariable String id) {
-        return usuarioService.obtenerPorId(id)
+    @Operation(summary = "Obtener jugador", description = "Obtiene un jugador por su identificador")
+    public ResponseEntity<JugadorResponse> obtener(@PathVariable String id) {
+        return jugadorService.obtenerPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

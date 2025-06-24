@@ -1,8 +1,8 @@
 package com.crduels.application.controller;
 
 import com.crduels.application.service.MatchmakingService;
-import com.crduels.infrastructure.dto.rq.SolicitudDueloRequest;
 import com.crduels.infrastructure.dto.rq.CancelarMatchmakingRequest;
+import com.crduels.infrastructure.dto.rq.PartidaEnEsperaRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +21,8 @@ public class MatchmakingController {
     private final MatchmakingService matchmakingService;
 
     @PostMapping("/ejecutar")
-    public ResponseEntity<?> ejecutarMatchmaking(@RequestBody SolicitudDueloRequest request) {
-        return matchmakingService.intentarEmparejar(request.getUsuarioId(), request.getModoJuego())
+    public ResponseEntity<?> ejecutarMatchmaking(@RequestBody PartidaEnEsperaRequest request) {
+        return matchmakingService.intentarEmparejar(request)
                 .map(partida -> {
                     Map<String, Object> partidaMap = new HashMap<>();
                     partidaMap.put("id", partida.getId());
@@ -40,7 +40,7 @@ public class MatchmakingController {
 
     @PostMapping("/cancelar")
     public ResponseEntity<?> cancelarMatchmaking(@RequestBody CancelarMatchmakingRequest request) {
-        matchmakingService.cancelarSolicitud(request.getUsuarioId());
+        matchmakingService.cancelarSolicitudes(request.getJugadorId());
         Map<String, Object> resp = new HashMap<>();
         resp.put("status", "cancelado");
         return ResponseEntity.ok(resp);

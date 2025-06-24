@@ -1,14 +1,23 @@
 package com.crduels.application.service;
+
+import com.crduels.domain.entity.Apuesta;
+import com.crduels.domain.entity.Jugador;
+import com.crduels.domain.entity.TipoTransaccion;
+import com.crduels.domain.entity.partida.ModoJuego;
+import com.crduels.domain.entity.partida.Partida;
+import com.crduels.domain.entity.partida.PartidaEnEspera;
 import com.crduels.infrastructure.dto.rq.ApuestaRequest;
-import com.crduels.domain.entity.DueloRequest;
-import com.crduels.domain.entity.Partida;
-import com.crduels.infrastructure.repository.DueloRequestRepository;
+import com.crduels.infrastructure.dto.rq.PartidaEnEsperaRequest;
+import com.crduels.infrastructure.dto.rq.TransaccionRequest;
+import com.crduels.infrastructure.dto.rs.TransaccionResponse;
+import com.crduels.infrastructure.mapper.PartidaEnEsperaMapper;
+import com.crduels.infrastructure.repository.JugadorRepository;
+import com.crduels.infrastructure.repository.PartidaEnEsperaRepository;
 import com.crduels.infrastructure.repository.PartidaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -18,83 +27,104 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MatchmakingService {
 
-    private final DueloRequestRepository dueloRequestRepository;
+    private final PartidaEnEsperaRepository partidaEnEsperaRepository;
+    private final TransaccionService transaccionService;
+    private final JugadorRepository jugadorRepository;
     private final PartidaRepository partidaRepository;
     private final ChatService chatService;
     private final ApuestaService apuestaService;
     private final MatchSseService matchSseService;
 
-    public DueloRequest registrarSolicitudDuelo(String usuarioId, String modoJuego) {
-        DueloRequest solicitud = DueloRequest.builder()
-                .id(UUID.randomUUID())
-                .usuarioId(usuarioId)
-                .modoJuego(modoJuego)
-                .estado("PENDIENTE")
-                .timestamp(LocalDateTime.now())
-                .build();
-
-        return dueloRequestRepository.save(solicitud);
-    }
+    private static final List<ModoJuego> PRIORIDAD_MODO_JUEGO = List.of(
+            ModoJuego.TRIPLE_ELECCION,
+            ModoJuego.CLASICO
+    );
 
     @Transactional
-    public Optional<Partida> intentarEmparejar(String usuarioId, String modoJuego) {
-        List<DueloRequest> pendientes = dueloRequestRepository
-                .findByModoJuegoAndEstado(modoJuego, "PENDIENTE");
+    public Optional<Partida> intentarEmparejar(PartidaEnEsperaRequest request) {
+        Jugador jugadorEnEspera = jugadorRepository.findById(request.getJugadorId())
+                .orElseThrow(() -> new IllegalArgumentException("Jugador no encontrado"));
 
-        for (DueloRequest otro : pendientes) {
-            if (!otro.getUsuarioId().equals(usuarioId)) {
-                otro.setEstado("EMPAREJADO");
-                dueloRequestRepository.save(otro);
-
-                DueloRequest actual = dueloRequestRepository
-                        .findByUsuarioIdAndEstado(usuarioId, "PENDIENTE")
-                        .orElse(null);
-
-                if (actual != null) {
-                    actual.setEstado("EMPAREJADO");
-                    dueloRequestRepository.save(actual);
-
-                    Partida partida = crearPartida(actual.getUsuarioId(), otro.getUsuarioId(), modoJuego);
-                    matchSseService.notifyMatch(partida);
-                    return Optional.of(partida);
-                }
-            }
+        if (jugadorEnEspera.getSaldo().compareTo(request.getMonto()) < 0) {
+            throw new IllegalArgumentException("Saldo insuficiente para realizar esta operación");
         }
 
-        return Optional.empty();
+        cancelarSolicitudes(jugadorEnEspera);
+
+        PartidaEnEspera partidaEnEsperaRq = PartidaEnEsperaMapper.toEntity(request);
+        PartidaEnEspera partidaEnEspera = partidaEnEsperaRepository.save(partidaEnEsperaRq);
+
+        return partidaEnEsperaRepository.findByModoJuegoAndMonto(partidaEnEspera.getModosJuego().get(0), request.getMonto())
+                .stream()
+                .filter(p -> !p.getJugador().getId().equals(partidaEnEspera.getJugador().getId()))
+                .findFirst() //todo: aquí debería estar la lógica para emparejar el matchmaking con personas del mismo nivel
+                .map(partidaEncontrada -> {
+
+                    Jugador jugadorEncontrado = jugadorRepository.findById(partidaEncontrada.getJugador().getId())
+                            .orElseThrow(() -> new IllegalArgumentException("Jugador en espera no encontrado"));
+
+                    if (jugadorEncontrado.getSaldo().compareTo(partidaEncontrada.getMonto()) < 0) {
+                        throw new IllegalArgumentException("Saldo insuficiente para realizar esta operación");
+                    }
+
+                    cancelarSolicitudes(jugadorEnEspera);
+                    cancelarSolicitudes(jugadorEncontrado);
+
+                    Partida partida = crearPartida(partidaEnEspera, partidaEncontrada);
+
+                    realizarTransaccion(partida.getApuesta(), jugadorEnEspera);
+                    realizarTransaccion(partida.getApuesta(), jugadorEncontrado);
+
+                    matchSseService.notifyMatch(partida);
+                    return partida;
+                });
     }
 
-    public void cancelarSolicitud(String usuarioId) {
-        dueloRequestRepository.findByUsuarioIdAndEstado(usuarioId, "PENDIENTE")
-                .ifPresent(dueloRequestRepository::delete);
+    private void cancelarSolicitudes(Jugador jugador) {
+        partidaEnEsperaRepository.deleteByJugador(jugador);
     }
 
-    private Partida crearPartida(String jugador1Id, String jugador2Id, String modoJuego) {
-        UUID partidaId = UUID.randomUUID();
-        UUID chatId = chatService.crearChatParaPartida(partidaId, jugador1Id, jugador2Id);
+    public void cancelarSolicitudes(String jugadorId) {
+        partidaEnEsperaRepository.deleteByJugador(new Jugador(jugadorId));
+    }
 
-        // Crear apuestas asociadas a la partida para ambos jugadores
-        ApuestaRequest apuestaRequest = ApuestaRequest.builder()
-                .jugador1Id(jugador1Id)
-                .jugador2Id(jugador2Id)
-                .partidaId(partidaId)
-                .monto(new BigDecimal("6000")) // o lo que sea dinámico
-                .modoJuego(modoJuego)
-                .build();
-
-        apuestaService.crearApuesta(apuestaRequest);
-
+    private Partida crearPartida(PartidaEnEspera partidaEnEspera, PartidaEnEspera partidaEncontrada) {
+        Apuesta apuesta = apuestaService.crearApuesta(new ApuestaRequest(partidaEnEspera.getMonto()));
+        ModoJuego modoJuego = obtenerModoJuegoCoincidente(partidaEnEspera, partidaEncontrada);
+        UUID chatId = chatService.crearChatParaPartida(partidaEnEspera.getJugador().getId(), partidaEncontrada.getJugador().getId());
 
         Partida partida = Partida.builder()
-                .id(partidaId)
-                .jugador1Id(jugador1Id)
-                .jugador2Id(jugador2Id)
+                .jugador1(partidaEnEspera.getJugador())
+                .jugador2(partidaEncontrada.getJugador())
                 .modoJuego(modoJuego)
-                .estado("ACTIVA")
+                .estado(com.crduels.domain.entity.partida.EstadoPartida.EN_CURSO)
                 .creada(LocalDateTime.now())
+                .validada(false)
                 .chatId(chatId)
+                .apuesta(apuesta)
                 .build();
 
         return partidaRepository.save(partida);
+    }
+
+
+    private void realizarTransaccion(Apuesta apuesta, Jugador jugador) {
+        TransaccionRequest request = TransaccionRequest.builder()
+                .monto(apuesta.getMonto())
+                .jugadorId(jugador.getId())
+                .tipo(TipoTransaccion.APUESTA)
+                .build();
+        TransaccionResponse response = transaccionService.registrarTransaccion(request);
+        transaccionService.aprobarTransaccion(response.getId());
+    }
+
+
+    public ModoJuego obtenerModoJuegoCoincidente(PartidaEnEspera partidaEncontrada,
+                                                 PartidaEnEspera partidaSolicitada) {
+        return PRIORIDAD_MODO_JUEGO.stream()
+                .filter(partidaEncontrada.getModosJuego()::contains)
+                .filter(partidaSolicitada.getModosJuego()::contains)
+                .findFirst()
+                .orElseGet(() -> PRIORIDAD_MODO_JUEGO.get(0));
     }
 }
