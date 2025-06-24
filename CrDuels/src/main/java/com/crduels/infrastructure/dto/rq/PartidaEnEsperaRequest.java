@@ -14,7 +14,8 @@ public class PartidaEnEsperaRequest {
     private String jugadorId;
 
     @NotEmpty
-    private List<ModoJuego> modosJuego;
+    //private List<ModoJuego> modosJuego;//todo: volver a lista
+    private ModoJuego modosJuego;
 
     @NotNull
     private BigDecimal monto;
