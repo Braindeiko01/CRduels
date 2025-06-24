@@ -16,7 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/matchmaking")
 @RequiredArgsConstructor
-public class MatchmakingController {
+public class    MatchmakingController {
 
     private final MatchmakingService matchmakingService;
 

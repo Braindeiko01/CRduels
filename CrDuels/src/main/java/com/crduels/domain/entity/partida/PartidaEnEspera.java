@@ -3,6 +3,8 @@ package com.crduels.domain.entity.partida;
 import com.crduels.domain.entity.Jugador;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -33,6 +35,7 @@ public class PartidaEnEspera {
     @JoinColumn(name = "jugador_id")
     private Jugador jugador;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "modo_juego", nullable = false)
     private ModoJuego modoJuego;
 
