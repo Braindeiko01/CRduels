@@ -9,7 +9,6 @@ import com.crduels.infrastructure.repository.JugadorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -36,18 +35,6 @@ public class JugadorService {
     public Optional<JugadorResponse> obtenerPorId(String id) {
         return jugadorRepository.findById(id)
                 .map(jugadorMapper::toDto);
-    }
-
-    public static void main(String[] args) {
-        var valor = BigDecimal.valueOf(1000);
-        var valor1 = BigDecimal.valueOf(1000);
-        System.out.println(valor.compareTo(valor1));
-    }
-
-    public boolean tieneMontoDisponibleParaAccion(String id, BigDecimal monto) {
-        return jugadorRepository.findById(id)
-                .map(jugador -> jugador.getSaldo().compareTo(monto) < 0)
-                .orElseThrow(() -> new IllegalArgumentException("Jugador no encontrado"));
     }
 
 }

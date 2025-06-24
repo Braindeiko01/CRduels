@@ -67,7 +67,7 @@ public class TransaccionService {
         switch (transaccion.getTipo()) {
             case DEPOSITO, PREMIO -> jugador.setSaldo(jugador.getSaldo().add(transaccion.getMonto()));
             case RETIRO, APUESTA -> {
-                if (jugador.getSaldo().compareTo(transaccion.getMonto()) < 0) {
+                if (jugador.getSaldo().compareTo(transaccion.getMonto()) >= 0) {
                     throw new IllegalArgumentException("Saldo insuficiente para realizar la transacción");
                 }
                 jugador.setSaldo(jugador.getSaldo().subtract(transaccion.getMonto()));
